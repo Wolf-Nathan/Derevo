@@ -1,0 +1,19 @@
+{
+  "name": "arbre_genealogique",
+  "version": "1.0.0",
+  "description": "Project of Alexis, Balzac, Ion and Nathan",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wolf-Nathan/VueJS_Project.git"
+  },
+  "author": "Alexis, Balzac, Ion, Nathan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Wolf-Nathan/VueJS_Project/issues"
+  },
+  "homepage": "https://github.com/Wolf-Nathan/VueJS_Project#readme"
+}
