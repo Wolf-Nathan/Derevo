@@ -1,0 +1,47 @@
+@import 'font.css';
+
+.navbar {
+    background-color: #4d747e;
+    height: 10vh;
+}
+
+.navbar-brand {
+    font-size: 45px;
+    font-family: "Kamila Regular";
+    color: rgb(226, 221, 221);
+}
+
+.nav-item {
+    color: rgb(226, 221, 221) !important;
+}
+
+.nav-item:hover {
+    color: rgb(255, 255, 255) !important;
+}
+
+.content {
+    height: 90vh;
+}
+
+.familly-image {
+    position: relative;
+    width: 50%;
+    background: url('/assets/images/home.jpg') center center no-repeat;
+    background-size: cover;
+}
+
+.familly-image:before {
+    content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-image: linear-gradient(to bottom right,rgb(118, 125, 129),#858483);
+	opacity: .4; 
+}
+
+.familly-content {
+    width: 50%;
+    height: 100%;
+}
