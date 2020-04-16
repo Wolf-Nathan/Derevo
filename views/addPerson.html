@@ -25,7 +25,7 @@
         </nav>
 
         <div class="container">
-            <h1 class="mt-4">Ajouter une personne</h1>
+            <h1 class="mt-4 mb-3">Ajouter une personne</h1>
             <form>
                 <fieldset>
 
@@ -82,7 +82,7 @@
                     </div>
 
                     <div id="maryForm">
-                        <div id="addMaryForm" v-show="addMariage">
+                        <div id="addMaryForm" v-show="addMariage" class="add-mary-form">
                                 <h6>Nouveau mariage</h6>
                                 <div class="form-group">
                                     <label for="mary"> Sélectionner le mari/la femme de la personne</label>
@@ -106,14 +106,14 @@
                                     <input type="date" class="form-control" id="divorceDate" placeholder="JJ/MM/YYYY">
                                 </div>
 
-                                <p v-on:click="validMary">Ajouter ce mariage</p>
+                                <p v-on:click="validMary" class="add-mary">Ajouter ce mariage</p>
                         </div>
 
-                        <p v-on:click="show">Ajouter un mariage ?</p>
+                        <p v-on:click="show" class="add-mary">Ajouter un mariage ?</p>
 
                     </div>
 
-                    <button class="mt-3">Valider le formulaire</button>
+                    <button class="mt-3 valid-form">Valider le formulaire</button>
 
                 </fieldset>
             </form>

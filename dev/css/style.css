@@ -100,3 +100,46 @@ th {
   text-align:right;
   color: #999;
 }
+
+/* add people page */
+.add-form-body {
+    background-color: #6d949e;
+    padding: 4px;
+}
+
+.add-mary {
+    padding: 10px;
+    background-color: white;
+    margin-left: 5px;
+    width: 16%;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.add-mary:hover {
+    padding: 10px;
+    background-color: #f0f0f0;
+    margin-left: 5px;
+    width: 16%;
+    border-radius: 5px;
+}
+
+.add-mary-form {
+    background-color: #8db4be;
+    border-radius: 8px;
+    padding-top: 5px;
+    padding-left: 8px;
+    padding-bottom: 3px;
+    margin-bottom: 15px;
+}
+
+.valid-form {
+    padding:6px 0 6px 0;
+    font:bold 13px Arial;
+    background:#ffffff;
+    color:#555;
+    border-radius:2px;
+    width:100px;
+    border:1px solid #ccc;
+    box-shadow:1px 1px 3px #999;
+}
