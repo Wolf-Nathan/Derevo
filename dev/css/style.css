@@ -2,22 +2,22 @@
 
 .navbar {
     background-color: #4d747e;
-    height: 10vh;
+    /* height: 10vh; */
     margin-bottom: 0;
 }
 
 .navbar-brand {
     font-size: 45px;
     font-family: "Kamila Regular";
-    color: rgb(226, 221, 221);
+    /* color: rgb(226, 221, 221); */
 }
 
 .nav-item {
-    color: rgb(226, 221, 221) !important;
+    /* color: rgb(226, 221, 221) !important; */
 }
 
 .nav-item:hover {
-    color: rgb(255, 255, 255) !important;
+    /* color: rgb(255, 255, 255) !important; */
 }
 
 .content {
