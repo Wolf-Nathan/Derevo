@@ -1,56 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Derevo</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
-	<!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script> -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
-	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
 	<link rel="stylesheet" href="./dev/css/style.css">
 </head>
-<body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<div class="container">
-			<a class="navbar-brand" href="index.html">Derevo</a>
-			
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
 
-			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="/views/about.html">À propos</a>
-				</div>
-				<div class="navbar-nav">
-					<a class="nav-item nav-link active" href="/views/addPerson.html">Ajouter un individu</a>
-				</div>
+<body class="bg-primary">
+	<nav class="navbar navbar-dark">
+		<div class="container justify-content-center">
+			<div class="navbar-nav col-2">
+				<a class="nav-item nav-link" href="/views/about.html">À propos</a>
+			</div>
+
+			<div class="navbar-nav col-2">
+				<a class="navbar-brand logo" href="index.html">Derevo</a>
+			</div>
+
+			<div class="navbar-nav col-2">
+				<a class="nav-item nav-link" href="/views/addPerson.html">Ajouter un individu</a>
 			</div>
 		</div>
-	  </nav>
-	
-	<div class="content d-flex justify-space-between">
-		<div class="familly-image"></div>
-		<div class="familly-content pt-3 pr-3 pl-3">
+	</nav>
+
+	<div class="content row justify-content-center">
+
+		<div class="row col-10">
+			<img class="familly-image" src="./assets/images/home.jpg" />
+		</div>
+
+		<div class="row col-10 justify-content-center">
 			<!-- Filters -->
-			<div class="header_wrap">
-				<div class="num_rows">
+			<div class="header_wrap col-11">
+				<div class="num_rows col-1">
 					<div class="form-group">
 						<select class="form-control" name="state" id="maxRows">
 							<option value="5">5</option>
 							<option value="10">10</option>
+							<option value="25">25</option>
 						</select>
 					</div>
 				</div>
-				<div class="tb_search">
-					<input type="text" id="search_input_all" onkeyup="FilterkeyWord_all_table()" placeholder="Search.." class="form-control">
+				<div class="tb_search col-3">
+					<input type="text" id="search_input_all" onkeyup="FilterkeyWord_all_table()"
+						placeholder="Rechercher..." class="form-control">
 				</div>
 			</div>
 
 			<!-- Table -->
-			<table class="table table-striped table-class" id="table-id">
+			<table class="table table-striped col-11" id="table-id">
 				<thead>
 					<tr>
 						<th>Name</th>
@@ -140,7 +143,7 @@
 					</tr>
 				<tbody>
 			</table>
-		
+
 			<!-- Start Pagination -->
 			<div class='pagination-container'>
 				<nav>
@@ -149,12 +152,13 @@
 					</ul>
 				</nav>
 			</div>
-			<div class="rows_count">Showing 5 to 10 of 100 entries</div>
+			<div class="rows_count"></div>
 		</div>
 	</div>
 
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
-	<script  src="./dev/js/pagination.js"></script>
+	<script src="./dev/js/pagination.js"></script>
 </body>
+
 </html>
