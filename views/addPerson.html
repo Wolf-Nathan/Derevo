@@ -38,16 +38,25 @@
             <div class="row col-10" id="body-add-person">
                 <h1 data-aos="fade-up" data-aos-delay="200" data-aos-duration="100">Ajouter une personne</h1>
                 <form id="form" data-aos="fade-up">
-                    <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="200"
+                    <div class="form-group col-sm-4 z-index-back" data-aos="fade-up" data-aos-delay="200"
                         data-aos-duration="1000">
                         <label for="nom"> Entrez le nom de la personne</label>
-                        <input type="text" class="form-control" id="nom" placeholder="Nom">
+                        <input type="text" v-model="nom" class="form-control" id="nom" placeholder="Nom">
                     </div>
 
-                    <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="300"
+                    <div class="form-group col-sm-4 z-index-back" data-aos="fade-up" data-aos-delay="300"
                         data-aos-duration="1000">
                         <label for="prenom"> Entrez le prénom de la personne</label>
-                        <input type="text" class="form-control" id="prenom" placeholder="Prénom">
+                        <input type="text" v-model="prenom" class="form-control" id="prenom" placeholder="Prénom">
+                    </div>
+
+                    <div class="form-group col-sm-4 z-index-back" data-aos="fade-up" data-aos-delay="300"
+                         data-aos-duration="1000">
+                        <label for="sexe"> Indiquez le sexe de la personne</label>
+                        <select id="sexe" v-model="sexe" class="form-control" name="sexe">
+                            <option value="H">Homme</option>
+                            <option value="F">Femme</option>
+                        </select>
                     </div>
 
                     <div class="form-group col-sm-6" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
@@ -63,29 +72,30 @@
                     <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="600"
                         data-aos-duration="1000">
                         <label for="pere"> Sélectionner le père de la personne</label>
-                        <select id="pere" class="form-control" name="pere">
-                            <option value="1">Roger George</option>
-                            <option value="2">Jacquie Michel</option>
+                        <select id="pere" v-model="pere" class="form-control" name="pere">
+                            <option v-for="person in persons" :value="person.id">
+                                {{ person.nom }} {{ person.prenom }}
+                            </option>
                         </select>
                     </div>
 
                     <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="700"
                         data-aos-duration="1000">
                         <label for="mere"> Sélectionner la mère de la personne</label>
-                        <select id="mere" class="form-control" name="mere">
-                            <option value="1">Rogette George</option>
-                            <option value="2">Jacqueline Michel</option>
+                        <select id="mere" v-model="mere" class="form-control" name="mere">
+                            <option v-for="person in persons" :value="person.id">
+                                {{ person.nom }} {{ person.prenom }}
+                            </option>
                         </select>
                     </div>
 
                     <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="800"
                         data-aos-duration="1000">
                         <label for="enfants"> Sélectionner les enfants de la personne</label>
-                        <select id="enfants" class="form-control" name="enfants" multiple="multiple">
-                            <option value="1">Roger George</option>
-                            <option value="2">Jacquie Michel</option>
-                            <option value="3">Rogette George</option>
-                            <option value="4">Jacqueline Michel</option>
+                        <select id="enfants" class="form-control" name="enfants" multiple="multiple" v-model="enfants">
+                            <option v-for="person in persons" :value="person.id">
+                                {{ person.nom }} {{ person.prenom }}
+                            </option>
                         </select>
                     </div>
 
@@ -161,10 +171,20 @@
                 fr: vdp_translation_fr.js,
                 done: false,
                 addMariage: false,
-                mariages: []
+                mariages: [],
+                persons: null,
             },
             components: {
                 vuejsDatepicker
+            },
+            mounted() {
+                if (localStorage.getItem('persons')) {
+                    try {
+                        this.persons = JSON.parse(localStorage.getItem('persons'));
+                    } catch(e) {
+                        localStorage.removeItem('persons');
+                    }
+                }
             },
             methods: {
                 show: function () {
@@ -193,12 +213,67 @@
                     // ICI, recuperer les valeurs des champs et instancier l'individu dans le LS.
                     //Pour recuperer les date des datePicker: this.dateNaissance par exmple (v-model)
                     //Verifie que les champs ne soient pas vide ;)
+                    if(this.prenom !== null && this.nom !== null) {
+                        var person = {
+                            id: null,
+                            prenom: this.prenom,
+                            nom: this.nom,
+                            sexe: this.sexe ?? null,
+                            dateNaissance: this.dateNaissance ? this.dateNaissance.toLocaleDateString('fr', {day: 'numeric', month: 'long', year: 'numeric'}) : null,
+                            dateMort: this.dateMort ? this.dateMort.toLocaleDateString('fr', {day: 'numeric', month: 'long', year: 'numeric'}) : null,
+                            pere: this.pere ?? null,
+                            mere: this.mere ?? null,
+                            enfants: this.enfants ?? [],
+                            mariage: null
+                        };
+                        if(this.persons){
+                            /*var lastPerson = this.persons[this.persons.length - 1];
+                            person.id = lastPerson.id + 1;*/
+                            person.id = this.persons.length;
 
-                    //exampleee :
-                    alert(this.dateNaissance);
+                           /* fonctionne pas
+                            // On récupère la dernière personne du tableau
+                            var reversePersons = this.persons;
+                            reversePersons.reverse();
+                            var lastPerson = reversePersons.shift();
+                            // Puis on incrémente l'id de cette personne pour déterminer l'id du nouvel individu
+                            person.id = lastPerson.id + 1;
+                            */
+                        }
+                        else {
+                            person.id = 0;
+                            this.persons = [];
+                        }
+                        this.persons[person.id] = person;
+
+                        if(this.pere) {
+                            this.persons[this.pere].enfants.push(person.id);
+                        }
+                        if(this.mere) {
+                            this.persons[this.mere].enfants.push(person.id);
+                        }
+                        if(this.enfants && this.sexe) {
+                            if(this.sexe === 'H') {
+                                this.enfants.forEach(enfant => {
+                                    this.persons[enfant].pere = person.id;
+                                });
+                            }
+                            else {
+                                this.enfants.forEach(enfant => {
+                                    this.persons[enfant].mere = person.id;
+                                });
+                            }
+                        }
+
+                        const parsed = JSON.stringify(this.persons);
+                        localStorage.setItem("persons", parsed);
+                        this.done = true;
+                    }
+                    else{
+                        alert("Merci de renseigner un nom et un prénom pour enregistrer l'individu !")
+                    }
                     
                     //this.done == true quand l'enregistrement a bein été fait :)
-                    this.done = true;
                 }
             }
         });
