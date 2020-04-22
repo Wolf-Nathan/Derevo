@@ -23,13 +23,13 @@ app.get('/', function (req, res) {
 }).get('/edit:id', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
-    res.sendFile('./editUser.html?userId=' + req.params.id, {
+    res.sendFile('./views/editUser.html?userId=' + req.params.id, {
         root: __dirname
     });
 }).get('/infos:id', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
-    res.sendFile('./infos.html?userId=' + req.params.id, {
+    res.sendFile('./views/infos.html?userId=' + req.params.id, {
         root: __dirname
     });
 })
