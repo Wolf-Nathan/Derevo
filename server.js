@@ -52,6 +52,12 @@ app.get('/', function (req, res) {
     res.sendFile('./dev/css/font.css', {root: __dirname });
 })
 
+.get('/Kamila', function(req, res) {
+    res.setHeader('Content-Type', 'text/css; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./assets/font/Kamila-DEMO-Regular.otf', {root: __dirname });
+})
+
 .get('/vue', function(req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
