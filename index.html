@@ -9,6 +9,7 @@
 		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
 	<link rel="stylesheet" href="/css">
+	<script src="/vue"></script>
 </head>
 
 <body class="bg-primary">
@@ -53,97 +54,24 @@
 			</div>
 
 			<!-- Table -->
-			<table class="table table-striped col-11" id="table-id">
+			<table id="table" class="table table-striped col-11" id="table-id">
 				<thead>
 					<tr>
-						<th>Name</th>
-						<th>Email</th>
-						<th>Phone</th>
-						<th>Date</th>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Date de naissance</th>
+						<th>Sexe</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>Rajah Armstrong</td>
-						<td>erat.neque@noncursusnon.ca</td>
-						<td>1-636-140-1210</td>
-						<td>Oct 26, 2015</td>
+				<tbody v-if="persons">
+					<tr v-for="person in persons">
+						<td>{{ person.nom }}</td>
+						<td>{{ person.prenom }}</td>
+						<td>{{ person.dateNaissance }}</td>
+						<td>{{ person.sexe }}</td>
 					</tr>
-					<tr>
-						<td>Kuame Parsons</td>
-						<td>non.sapien@in.com</td>
-						<td>1-962-122-8834</td>
-						<td>Aug 2, 2015</td>
-					</tr>
-					<tr>
-						<td>Ira Parker</td>
-						<td>Vivamus.molestie.dapibus@quisturpisvitae.edu</td>
-						<td>1-584-906-8572</td>
-						<td>Sep 15, 2015</td>
-					</tr>
-					<tr>
-						<td>Dante Carlson</td>
-						<td>dis.parturient@mi.co.uk</td>
-						<td>1-364-156-9666</td>
-						<td>Nov 28, 2015</td>
-					</tr>
-					<tr>
-						<td>Nathan Bernard</td>
-						<td>Etiam.vestibulum.massa@nonummy.net</td>
-						<td>1-646-420-3211</td>
-						<td>Aug 4, 2016</td>
-					</tr>
-					<tr>
-						<td>Dillon Poole</td>
-						<td>eget@vitae.ca</td>
-						<td>1-788-762-3800</td>
-						<td>Apr 25, 2016</td>
-					</tr>
-					<tr>
-						<td>Hu Leach</td>
-						<td>ligula.eu.enim@eu.org</td>
-						<td>1-888-617-5106</td>
-						<td>Nov 3, 2015</td>
-					</tr>
-					<tr>
-						<td>Dean Lucas</td>
-						<td>ligula.Nullam.feugiat@orciUt.org</td>
-						<td>1-176-725-3287</td>
-						<td>Mar 10, 2016</td>
-					</tr>
-					<tr>
-						<td>Dorian Durham</td>
-						<td>at@conubianostraper.org</td>
-						<td>1-867-829-4207</td>
-						<td>Nov 11, 2016</td>
-					</tr>
-					<tr>
-						<td>Dorian Durham</td>
-						<td>at@conubianostraper.org</td>
-						<td>1-867-829-4207</td>
-						<td>Nov 11, 2016</td>
-					</tr>
-					<tr>
-						<td>Dorian Durham</td>
-						<td>at@conubianostraper.org</td>
-						<td>1-867-829-4207</td>
-						<td>Nov 11, 2016</td>
-					</tr>
-					<tr>
-						<td>Dorian Durham</td>
-						<td>at@conubianostraper.org</td>
-						<td>1-867-829-4207</td>
-						<td>Nov 11, 2016</td>
-					</tr>
-					<tr>
-						<td>Dorian Durham</td>
-						<td>at@conubianostraper.org</td>
-						<td>1-867-829-4207</td>
-						<td>Nov 11, 2016</td>
-					</tr>
-				<tbody>
+				</tbody>
 			</table>
-
 			<!-- Start Pagination -->
 			<div class='pagination-container'>
 				<nav>
@@ -159,6 +87,23 @@
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
 	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
 	<script src="/pagination"></script>
+	<script>
+		let maryFormModele = new Vue({
+            el: "#table",
+            data: {
+                persons: null,
+			},
+			mounted() {
+                if (localStorage.getItem('persons')) {
+                    try {
+                        this.persons = JSON.parse(localStorage.getItem('persons'));
+                    } catch(e) {
+                        localStorage.removeItem('persons');
+                    }
+                }
+            }
+        });
+	</script>
 </body>
 
 </html>
