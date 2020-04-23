@@ -66,6 +66,12 @@ app.get('/', function (req, res) {
     res.sendFile('./dev/js/vue.js', {root: __dirname });
 })
 
+.get('/addPerson', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/addPerson.js', {root: __dirname });
+})
+
 .get('/pagination', function(req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
