@@ -71,6 +71,9 @@
 						<td>{{ person.sexe }}</td>
 					</tr>
 				</tbody>
+				<tbody v-else>
+					<td colspan="4">Veuillez <a href="/add">ajouter</a> une personne</td>
+				</tbody>
 			</table>
 			<!-- Start Pagination -->
 			<div class='pagination-container'>
