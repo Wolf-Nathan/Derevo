@@ -89,7 +89,7 @@ function showig_rows_count(maxRows, pageNum, totalRows) {
 
 // CREATING INDEX
 function default_index() {
-    $('table tr:eq(0)').prepend('<th> ID </th>')
+    $('table tr:eq(0)').prepend('<th> # </th>')
 
     var id = 0;
 
