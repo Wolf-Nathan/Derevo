@@ -25,7 +25,6 @@ app.get('/', function (req, res) {
     res.status(200);
     res.sendFile('./views/editPerson.html', {
         root: __dirname,
-        id: req.params.id
     });
 }).get('/infos:id', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');

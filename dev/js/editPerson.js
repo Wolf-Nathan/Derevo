@@ -25,8 +25,8 @@ let formModele = new Vue({
         if (localStorage.getItem('persons')) {
             try {
                 this.persons = JSON.parse(localStorage.getItem('persons'));
-                id = 11;
-                personModif = this.persons[id];
+                const urlParams = new URLSearchParams(window.location.search);
+                personModif = this.persons[urlParams.get('id')];
                 this.nom = personModif.nom;
                 this.prenom = personModif.prenom;
                 this.sexe = personModif.sexe ?? null;
