@@ -1,27 +1,111 @@
-<!DOCTYPE html>
-<html>
-<script src="js/vue.js"></script>
+<html lang="en">
 
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style_arbre.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Derevo</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+	<link rel="stylesheet" href="/css">
+	<script src="/vue"></script>
 </head>
 
-<body>
-    <h1>Il faut bien un début !</h1>
+<body class="bg-primary">
+	<nav class="navbar navbar-dark">
+		<div class="container justify-content-center">
+			<div class="navbar-nav col-2">
+				<a class="nav-item nav-link" href="/about">À propos</a>
+			</div>
 
-    <div class="tree">
-        <ul>
-            <li>
-                <div id="personne">
-                    <personne nom="Dupont" prenom="Michel" id_p="1"></personne>
-                </div>
-            </li>
-        </ul>
-    </div>
+			<div class="navbar-nav col-2">
+				<a class="navbar-brand logo" href="/">Derevo</a>
+			</div>
 
+			<div class="navbar-nav col-2">
+				<a class="nav-item nav-link" href="/add">Ajouter un individu</a>
+			</div>
+		</div>
+	</nav>
 
-    <script type="text/javascript" src="personne.js"></script>
+	<div class="content row justify-content-center">
+
+		<div class="row col-10">
+			<img class="familly-image" src="images/home.jpg" />
+		</div>
+
+		<div class="row col-10 justify-content-center">
+			<!-- Filters -->
+			<div class="header_wrap col-11">
+				<div class="num_rows col-1">
+					<div class="form-group">
+						<select class="form-control" name="state" id="maxRows">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="25">25</option>
+						</select>
+					</div>
+				</div>
+				<div class="tb_search col-3">
+					<input type="text" id="search_input_all" onkeyup="FilterkeyWord_all_table()"
+						placeholder="Rechercher..." class="form-control">
+				</div>
+			</div>
+
+			<!-- Table -->
+			<table id="table" class="table table-striped col-11" id="table-id">
+				<thead>
+					<tr>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Date de naissance</th>
+						<th>Sexe</th>
+					</tr>
+				</thead>
+				<tbody v-if="persons">
+					<tr v-for="person in persons">
+						<td>{{ person.nom }}</td>
+						<td>{{ person.prenom }}</td>
+						<td>{{ person.dateNaissance }}</td>
+						<td>{{ person.sexe }}</td>
+					</tr>
+				</tbody>
+				<tbody v-else>
+					<td colspan="4">Veuillez <a href="/add">ajouter</a> une personne</td>
+				</tbody>
+			</table>
+			<!-- Start Pagination -->
+			<div class='pagination-container'>
+				<nav>
+					<ul class="pagination">
+						<!-- Here the JS Function Will Add the Rows -->
+					</ul>
+				</nav>
+			</div>
+			<div class="rows_count"></div>
+		</div>
+	</div>
+
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
+	<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
+	<script src="/pagination"></script>
+	<script>
+		let maryFormModele = new Vue({
+            el: "#table",
+            data: {
+                persons: null,
+			},
+			mounted() {
+                if (localStorage.getItem('persons')) {
+                    try {
+                        this.persons = JSON.parse(localStorage.getItem('persons'));
+                    } catch(e) {
+                        localStorage.removeItem('persons');
+                    }
+                }
+            }
+        });
+	</script>
 </body>
-
 
 </html>

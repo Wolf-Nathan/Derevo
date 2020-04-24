@@ -1,0 +1,333 @@
+@import '/font';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+.navbar {
+    background-color: #52818f;
+    text-align: center;
+    margin-bottom: 0;
+    position: fixed;
+    width: 100%;
+    padding: 1rem;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+#body-add-person {
+    margin: auto !important;
+}
+
+.bg-primary {
+    background-color: #67909b !important;
+}
+
+.bg-secondary {
+    background-color: #52818f !important;
+}
+
+.button {
+    padding: 10px;
+    background-color: #52818f;
+    width: fit-content;
+    border-radius: 5px;
+    text-align: center;
+    border: none;
+}
+
+.button:hover {
+    background-color: #8db4be;
+    cursor: pointer;
+}
+
+.navbar-brand {
+    font-size: 45px;
+    font-family: "Kamila Regular";
+    /* color: rgb(226, 221, 221); */
+}
+
+.logo {
+    font-size: 54px !important;
+}
+
+.content {
+    padding-top: 8em !important;
+    width: 100%;
+}
+
+.familly-image {
+    height: 20em;
+    display: block;
+    margin: auto;
+}
+
+.familly-image:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: .4;
+}
+
+.familly-content {
+    width: 50%;
+    height: 100%;
+}
+
+table {
+    border-radius: 5px;
+}
+
+table th,
+table td {
+    text-align: center;
+}
+
+table tr:nth-child(even) {
+    background-color: #e4e3e3
+}
+
+th {
+    background-color: #52818f;
+    color: #fff;
+}
+
+.pagination {
+    margin: 0;
+}
+
+.pagination li:hover {
+    cursor: pointer;
+}
+
+.pagination>.active>span,
+.pagination>.active>span:hover {
+    background-color: #52818f;
+    border-color: #52818f;
+}
+
+.header_wrap {
+    padding-top: s30px;
+}
+
+.num_rows {
+    width: 20%;
+    float: left;
+}
+
+.tb_search {
+    width: 20%;
+    float: right;
+}
+
+.pagination-container {
+    width: 70%;
+    float: left;
+}
+
+.rows_count {
+    width: 20%;
+    float: right;
+    text-align: right;
+    color: #fff;
+}
+
+/* About page */
+
+.team-member {
+    margin: 15px 0;
+    padding: 0;
+}
+
+.team-member figure {
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+}
+
+.team-member figure img {
+    width: 100%;
+    height: 17em;
+}
+
+.team-member figcaption p {
+    font-size: 18px;
+    margin-bottom: 1em;
+}
+
+.team-member figcaption ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.team-member figcaption ul {
+    visibility: visible;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+
+.team-member figcaption ul li {
+    display: inline-block;
+    padding: 10px;
+}
+
+a i {
+    color: #fff;
+}
+
+a i:hover {
+    color: #555;
+}
+
+.team-member figcaption {
+    padding: 50px;
+    color: transparent;
+    background-color: transparent;
+    position: absolute;
+    z-index: 996;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.team-member figure:hover figcaption {
+    visibility: visible;
+    color: #fff;
+    background: #52818f;    
+    height: 100%;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+.team-member figure:hover figcaption ul li a:hover {
+    color: rgba(49, 49, 49, .97);
+}
+
+.team-member figure img {
+    -webkit-transform: scale(1) rotate(0) translateY(0);
+    -moz-transform: scale(1) rotate(0) translateY(0);
+    -o-transform: scale(1) rotate(0) translateY(0);
+    -ms-transform: scale(1) rotate(0) translateY(0);
+    transform: scale(1) rotate(0) translateY(0);
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+
+.team-member figure:hover img {
+    -webkit-transform: scale(1.1) rotate(0) translateY(12px);
+    -moz-transform: scale(1.1) rotate(0) translateY(12px);
+    -o-transform: scale(1.1) rotate(0) translateY(12px);
+    -ms-transform: scale(1.1) rotate(0) translateY(12px);
+    transform: scale(1.1) rotate(0) translateY(12px);
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+
+/* add people page */
+
+.z-index-back {
+    z-index: -1 !important;
+}
+
+.add-mary-form {
+    background-color: #8db4be;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.valid-form {
+    padding: 10px;
+    font: bold 13px Arial;
+    background: #52818f;
+    color: #fff;
+    border-radius: 2px;
+    float: right;
+    border: none;
+    border-radius: 5px;
+    position: absolute;
+    bottom: -2em;
+    right: 0;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 1em;
+    right: 2em;
+}
+
+.closeBtn:hover {
+    cursor: pointer;
+}
+
+.doneAddPerson {
+    text-align: center;
+}
+.doneAddPerson>i {
+    font-size: 54px;
+}
+.doneAddPerson>h2 {
+    margin: 10px 0;
+}
+
+/* Style of date picker */
+.selected {
+    color: white;
+    background-color: #52818f !important;
+}
+
+.vdp-datepicker>div>input {
+    width: 100% !important;
+    color: #555;
+    padding: 5px 12px;
+    font-family: 'Montserrat', sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.vdp-datepicker__calendar {
+    width: 80% !important;
+    border: 1px solid #52818f !important;
+    border-radius: 5px;
+    color: #52818f;
+}
+
+.day-header {
+    color: #000 !important;
+}
+
+.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).day:hover,
+.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).month:hover,
+.vdp-datepicker__calendar .cell:not(.blank):not(.disabled).year:hover {
+    border: 1px solid #52818f !important;
+}
+
+/* vueJS animation */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 1s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
