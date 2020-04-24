@@ -134,14 +134,14 @@
                         <div class="form-group col-12" v-if="mariages.length">
                             <div v-for="(mariage, index) in mariages">
                                 <div v-if="!mariage.divorceDate">
-                                    <p v-if="mariages.length > 1">Mariage numéro {{ index+1 }}:
+                                    <p v-if="mariages.length > 1">Mariage numéro {{ index+1 }} avec {{ persons[mariage.maryId].nom }} {{ persons[mariage.maryId].prenom }}:
                                         {{ mariage.mariageDate }} - actuel</p>
-                                    <p v-else>Mariage: {{ mariage.mariageDate }} - actuel</p>
+                                    <p v-else>Mariage avec {{ persons[mariage.maryId].nom }} {{ persons[mariage.maryId].prenom }}: {{ mariage.mariageDate }} - actuel</p>
                                 </div>
                                 <div v-else>
-                                    <p v-if="mariages.length > 1">Mariage numéro {{ index+1 }}:
+                                    <p v-if="mariages.length > 1">Mariage numéro {{ index+1 }} avec {{ persons[mariage.maryId].nom }} {{ persons[mariage.maryId].prenom }}:
                                         {{ mariage.mariageDate }} - {{ mariage.divorceDate }}</p>
-                                    <p v-else>Mariage: {{ mariage.mariageDate }} - {{ mariage.divorceDate }}</p>
+                                    <p v-else>Mariage avec {{ persons[mariage.maryId].nom }} {{ persons[mariage.maryId].prenom }}: {{ mariage.mariageDate }} - {{ mariage.divorceDate }}</p>
                                 </div>
                             </div>
                         </div>
