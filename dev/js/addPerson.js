@@ -1,6 +1,6 @@
 AOS.init();
 
-let maryFormModele = new Vue({
+let formModele = new Vue({
     el: "#form",
     data: {
         fr: vdp_translation_fr.js,
@@ -15,6 +15,7 @@ let maryFormModele = new Vue({
         pere: null,
         mere: null,
         enfants: [],
+        mariageNumber: 0,
         persons: null,
     },
     components: {
@@ -31,22 +32,26 @@ let maryFormModele = new Vue({
     },
     methods: {
         show: function () {
+            this.mary = null;
+            this.dateMariage = null;
+            this.dateDivorce = null;
             this.addMariage = true;
         },
         cancelMary: function () {
             this.addMariage = false;
         },
         validMary: function () {
-            var maryIdPerson = document.getElementById("mary").value;
+            this.mariageNumber++ ;
+            var maryId = document.getElementById("mary").value;
             var mariageDate = document.getElementById("mariageDate").value;
             var divorceDate = document.getElementById("divorceDate").value;
 
-            if (maryIdPerson && mariageDate) {
+            if (maryId && mariageDate) {
                 this.addMariage = false;
                 this.mariages.push({
-                    "maryIdPerson": maryIdPerson,
+                    "maryId": maryId,
                     "mariageDate": mariageDate,
-                    "divorceDate": divorceDate
+                    "divorceDate": divorceDate ?? null
                 });
             } else {
                 alert("Merci d'indiquer une date de mariage !");
@@ -67,21 +72,21 @@ let maryFormModele = new Vue({
                     pere: this.pere ?? null,
                     mere: this.mere ?? null,
                     enfants: this.enfants ?? [],
-                    mariage: null
+                    mariages: this.mariages ?? null
                 };
                 if(this.persons){
                     /*var lastPerson = this.persons[this.persons.length - 1];
                     person.id = lastPerson.id + 1;*/
                     person.id = this.persons.length;
 
-                /* fonctionne pas
-                    // On récupère la dernière personne du tableau
-                    var reversePersons = this.persons;
-                    reversePersons.reverse();
-                    var lastPerson = reversePersons.shift();
-                    // Puis on incrémente l'id de cette personne pour déterminer l'id du nouvel individu
-                    person.id = lastPerson.id + 1;
-                    */
+                    /* fonctionne pas
+                     // On récupère la dernière personne du tableau
+                     var reversePersons = this.persons;
+                     reversePersons.reverse();
+                     var lastPerson = reversePersons.shift();
+                     // Puis on incrémente l'id de cette personne pour déterminer l'id du nouvel individu
+                     person.id = lastPerson.id + 1;
+                     */
                 }
                 else {
                     person.id = 0;
@@ -107,6 +112,15 @@ let maryFormModele = new Vue({
                         });
                     }
                 }
+                if(this.mariages) {
+                    this.mariages.forEach(mariage => {
+                        this.persons[mariage.maryId].mariages.push({
+                            "maryId": person.id,
+                            "mariageDate": mariage.mariageDate,
+                            "divorceDate": mariage.divorceDate ?? null
+                        });
+                    })
+                }
 
                 const parsed = JSON.stringify(this.persons);
                 localStorage.setItem("persons", parsed);
@@ -115,7 +129,7 @@ let maryFormModele = new Vue({
             else{
                 alert("Merci de renseigner un nom et un prénom pour enregistrer l'individu !")
             }
-            
+
             //this.done == true quand l'enregistrement a bein été fait :)
         }
     }
