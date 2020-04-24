@@ -20,11 +20,12 @@ app.get('/', function (req, res) {
     res.sendFile('./views/addPerson.html', {
         root: __dirname
     });
-}).get('/edit:id', function (req, res) {
+}).get('/edit', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
-    res.sendFile('./views/editUser.html?userId=' + req.params.id, {
-        root: __dirname
+    res.sendFile('./views/editPerson.html', {
+        root: __dirname,
+        id: req.params.id
     });
 }).get('/infos:id', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
@@ -70,6 +71,12 @@ app.get('/', function (req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
     res.sendFile('./dev/js/addPerson.js', {root: __dirname });
+})
+
+.get('/editPerson', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/editPerson.js', {root: __dirname });
 })
 
 .get('/pagination', function(req, res) {
