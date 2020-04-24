@@ -47,8 +47,12 @@ function genere() {
         "dateNaissance": "13/12/1959",
         "dateMort": "",
         "listEnfant": [{
-            "id": 2
-        }],
+                "id": 2
+            },
+            {
+                "id": 5
+            }
+        ],
         "idPere": -1,
         "idMere": -1,
         "listMariage": []
@@ -64,6 +68,29 @@ function genere() {
         "idMere": 2,
         "listMariage": []
     };
-
-    localStorage.setItem("personnes", JSON.stringify([personne1, personne2, personne3, personne4]));
+    let personne5 = {
+        "id": 5,
+        "nom": "GRANGER",
+        "prenom": "Frere",
+        "dateNaissance": "13/10/1999",
+        "dateMort": "",
+        "listEnfant": [{
+            "id": 6
+        }],
+        "idPere": 3,
+        "idMere": -1,
+        "listMariage": []
+    };
+    let personne6 = {
+        "id": 6,
+        "nom": "GRANGER",
+        "prenom": "Fils Frere",
+        "dateNaissance": "13/12/2009",
+        "dateMort": "",
+        "listEnfant": [],
+        "idPere": 5,
+        "idMere": -1,
+        "listMariage": []
+    };
+    localStorage.setItem("personnes", JSON.stringify([personne1, personne2, personne3, personne4, personne5, personne6]));
 }

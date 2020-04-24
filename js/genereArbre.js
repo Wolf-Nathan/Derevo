@@ -5,7 +5,7 @@ let arbre = new Vue({
     },
     components: {
         'Arbre': {
-            props: ['personnes'],
+            props: ['personnes', 'selected'],
             components: {
                 'Personne': {
                     props: ["nom", "prenom", "id_p"],
@@ -16,23 +16,24 @@ let arbre = new Vue({
                 }
             },
             methods: {
-                creerArbre(idCurrent, idRoot, createElement) {
+                creerArbreAsc(idCurrent, createElement) {
+                    console.log('current Asc : ', idCurrent);
+                    var currentP = this.findPersonne(idCurrent);
+
+                    if (currentP.idPere < 0 && currentP.idMere < 0) {
+                        return this.creerArbreDesc(idCurrent, createElement);
+                    } else {
+                        if (currentP.idPere >= 0) {
+                            return this.creerArbreAsc(currentP.idPere, createElement);
+                        } else {
+                            return this.creerArbreAsc(currentP.idMere, createElement);
+                        }
+                    }
+                },
+                creerArbreDesc(idCurrent, createElement) {
                     console.log('current : ', idCurrent);
                     var currentP = this.findPersonne(idCurrent);
-                    var mariage = [];
-                    if (currentP.listMariage.length > 0) {
-                        for (f of currentP.listMariage) {
-                            fiance = this.findPersonne(f.id);
-                            mariage.push(createElement('Personne', {
-                                props: {
-                                    nom: fiance.nom,
-                                    prenom: fiance.prenom,
-                                    id_p: fiance.id
-                                }
-                            }));
-                        }
-
-                    }
+                    var mariage = this.creerMariage(currentP, createElement);
 
                     if (currentP.listEnfant.length == 0) {
                         console.log("pas d'enfants");
@@ -48,9 +49,10 @@ let arbre = new Vue({
                         var personnesCrees = [];
                         for (e of currentP.listEnfant) {
                             console.log('enfant : ', e.id);
-                            personnesCrees.push(this.creerArbre(e.id, idRoot, createElement));
+                            personnesCrees.push(this.creerArbreDesc(e.id, createElement));
                         }
                         console.log(currentP);
+
                         return createElement("li", [createElement('Personne', {
                             props: {
                                 nom: currentP.nom,
@@ -59,6 +61,22 @@ let arbre = new Vue({
                             }
                         }), mariage, createElement("ul", personnesCrees)]);
                     }
+                },
+                creerMariage(currentP, createElement) {
+                    var mariage = [];
+                    if (currentP.listMariage.length > 0) {
+                        for (f of currentP.listMariage) {
+                            fiance = this.findPersonne(f.id);
+                            mariage.push(createElement('Personne', {
+                                props: {
+                                    nom: fiance.nom,
+                                    prenom: fiance.prenom,
+                                    id_p: fiance.id
+                                }
+                            }));
+                        }
+                    }
+                    return mariage;
                 },
                 findPersonne(needle) {
                     for (var i = 0; i < this.personnes.length; i++) {
@@ -69,7 +87,7 @@ let arbre = new Vue({
                 }
             },
             render: function(createElement) {
-                return createElement("ul", [this.creerArbre(this.personnes[2].id, this.personnes[2].id, createElement)]);
+                return createElement("ul", [this.creerArbreAsc(this.personnes[this.selected].id, createElement)]);
             }
 
         }
@@ -77,7 +95,7 @@ let arbre = new Vue({
     methods: {
         chargerPersonne() {
             this.personnes = JSON.parse(localStorage.getItem("personnes"));
-            console.log(this.personnes);
+            //console.log(this.personnes);
         },
     },
     created: function() {
