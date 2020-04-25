@@ -34,6 +34,14 @@ app.get('/', function (req, res) {
     });
 })
 
+.get('/delete', function (req, res) {
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./views/deletePerson.html', {
+        root: __dirname
+    });
+})
+
 .get('/about', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
@@ -76,6 +84,12 @@ app.get('/', function (req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
     res.sendFile('./dev/js/editPerson.js', {root: __dirname });
+})
+
+.get('/deletePerson', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/deletePerson.js', {root: __dirname});
 })
 
 .get('/pagination', function(req, res) {
