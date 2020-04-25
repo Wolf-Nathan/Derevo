@@ -37,7 +37,7 @@
     <transition name="fade">
         <div class="row col-10" id="body-add-person">
             <h1 data-aos="fade-up" data-aos-delay="200" data-aos-duration="100">Modifier une personne</h1>
-            <form id="form" data-aos="fade-up">
+            <form data-aos="fade-up" id="form" >
                 <div class="form-group col-sm-4 z-index-back" data-aos="fade-up" data-aos-delay="200"
                      data-aos-duration="1000">
                     <label for="nom"> Nom</label>
@@ -97,6 +97,8 @@
                             {{ person.nom }} {{ person.prenom }}
                         </option>
                     </select>
+
+                    <input type="button" v-on:click="removeSelectChilds" value="Supprimer tout les enfants sélectionnés" />
                 </div>
 
                 <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="900"
