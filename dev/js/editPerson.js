@@ -113,6 +113,12 @@ let formModele = new Vue({
             // Comment gérer la modification des enfants ?
             // Car pour chaque changement il faudra gérer l'ajout/ la suppression du parent pour l'individu.
             //personModif.enfants = this.enfants;
+            // 1er essai on boucle sur tout les enfants du tableau de base de la personne modifiée,
+            // on regarde pour chaque enfant si il est dans le tableau this.enfants, si il n'y est
+            // pas c'est qu'il a été enlevé et donc ensuite on enlève son père ou sa mère selon le sexe
+            // puis on boucle sur this.enfants et on regarde pour chaque enfant si il y est dans person.modif
+            // si il y est pas c'est que l'enfant vient d'être ajouté et donc on lui rajoute en tant que pere ou
+            // mere la personne modifiée
             personModif.mariages = this.mariages;
 
             this.persons[personModif.id] = personModif;
