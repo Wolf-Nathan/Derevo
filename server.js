@@ -26,10 +26,10 @@ app.get('/', function (req, res) {
     res.sendFile('./views/editPerson.html', {
         root: __dirname,
     });
-}).get('/infos:id', function (req, res) {
+}).get('/infos', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
-    res.sendFile('./views/infos.html?userId=' + req.params.id, {
+    res.sendFile('./views/infos.html', {
         root: __dirname
     });
 })
@@ -54,6 +54,12 @@ app.get('/', function (req, res) {
     res.setHeader('Content-Type', 'text/css; charset=UTF-8');
     res.status(200);
     res.sendFile('./dev/css/style.css', {root: __dirname});
+})
+
+.get('/arbreCss', function(req, res) {
+    res.setHeader('Content-Type', 'text/css; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/css/style_arbre.css', {root: __dirname});
 })
 
 .get('/font', function(req, res) {
@@ -92,9 +98,27 @@ app.get('/', function (req, res) {
     res.sendFile('./dev/js/deletePerson.js', {root: __dirname});
 })
 
+.get('/infosPerson', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/infos.js', {root: __dirname});
+})
+
 .get('/pagination', function(req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
     res.sendFile('./dev/js/pagination.js', {root: __dirname });
+})
+
+.get('/genereDonnees', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/genereDonnees.js', {root: __dirname});
+})
+
+.get('/genereArbre', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/genereArbre.js', {root: __dirname});
 });
 
