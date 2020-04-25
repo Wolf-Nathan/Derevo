@@ -57,6 +57,9 @@ let formModele = new Vue({
                 alert("Merci d'indiquer une date de mariage !");
             }
         },
+        removeSelectChilds: function () {
+            this.enfants = [];
+        },
         addPerson: function () {
             // ICI, recuperer les valeurs des champs et instancier l'individu dans le LS.
             //Pour recuperer les date des datePicker: this.dateNaissance par exmple (v-model)
@@ -94,13 +97,13 @@ let formModele = new Vue({
                 }
                 this.persons[person.id] = person;
 
-                if(this.pere) {
+                if(this.pere || this.pere === 0) {
                     this.persons[this.pere].enfants.push(person.id);
                 }
-                if(this.mere) {
+                if(this.mere || this.mere === 0) {
                     this.persons[this.mere].enfants.push(person.id);
                 }
-                if(this.enfants && this.sexe) {
+                if(this.enfants) {
                     if(this.sexe === 'H') {
                         this.enfants.forEach(enfant => {
                             this.persons[enfant].pere = person.id;
