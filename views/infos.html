@@ -34,24 +34,26 @@
         </div>
     </nav>
 
-    <div class="row col-10">
-        <div id="arbre" class="tree mt-4">
-            <Arbre v-bind:personnes='personnes' selected='2'>
-            </Arbre>
+    <div class="content container justify-content-center">
+        <div class="row col-10">
+            <div id="arbre" class="tree mt-4">
+                <Arbre v-bind:personnes='personnes' selected='2'>
+                </Arbre>
+            </div>
+
+            <div id="infos">
+                <h5>{{ titre }} {{ nom }} {{ prenom }}</h5>
+                <p v-show="pere">Père: {{ pere }}</p>
+                <p v-show="mere">Mère: {{ mere}}</p>
+                <p v-show="enfants.length">Enfants : <span v-for="(enfant, index) in enfants"><span v-if="index > 0"> , </span>{{ enfant }}</span></p>
+                <p v-show="dateNaissance">Né le : {{ dateNaissance}}</p>
+                <p v-show="dateMort">Mort le : {{ dateMort}}</p>
+                <p v-show="mariages.length" v-for="mariage in mariages">{{ mariage }}</p>
+            </div>
+    
+
+
         </div>
-
-        <div id="infos">
-            <h5>{{ titre }} {{ nom }} {{ prenom }}</h5>
-            <p v-show="pere">Père: {{ pere }}</p>
-            <p v-show="mere">Mère: {{ mere}}</p>
-            <p v-show="enfants.length">Enfants : <span v-for="(enfant, index) in enfants"><span v-if="index > 0"> , </span>{{ enfant }}</span></p>
-            <p v-show="dateNaissance">Né le : {{ dateNaissance}}</p>
-            <p v-show="dateMort">Mort le : {{ dateMort}}</p>
-            <p v-show="mariages.length" v-for="mariage in mariages">{{ mariage }}</p>
-        </div>
-
-
-
     </div>
 
     <script src="/genereDonnees"></script>
