@@ -7,7 +7,7 @@ let formModele = new Vue({
         done: false,
         goodId : true,
         persons: null,
-        personModif: {nom: "Nom"},
+        personModif: { nom: "Nom" },
         nom: null,
         prenom: null,
         sexe: null,
@@ -51,17 +51,17 @@ let formModele = new Vue({
         }
     },
     methods: {
-        show: function () {
+        show: function() {
             this.mary = null;
             this.dateMariage = null;
             this.dateDivorce = null;
             this.addMariage = true;
         },
-        cancelMary: function () {
+        cancelMary: function() {
             this.addMariage = false;
         },
-        validMary: function () {
-            this.mariageNumber++ ;
+        validMary: function() {
+            this.mariageNumber++;
             var maryId = document.getElementById("mary").value;
             var mariageDate = document.getElementById("mariageDate").value;
             var divorceDate = document.getElementById("divorceDate").value;
@@ -71,13 +71,13 @@ let formModele = new Vue({
                 this.mariages.push({
                     "maryId": maryId,
                     "mariageDate": mariageDate,
-                    "divorceDate": divorceDate ?? null
+                    "divorceDate": divorceDate ? ? null
                 });
                 // On ajoute également le mariage au second individu
                 this.persons[maryId].mariages.push({
                     "maryId": personModif.id,
                     "mariageDate": mariageDate,
-                    "divorceDate": divorceDate ?? null
+                    "divorceDate": divorceDate ? ? null
                 });
             } else {
                 alert("Merci d'indiquer une date de mariage !");
@@ -97,10 +97,10 @@ let formModele = new Vue({
                 personModif.sexe = this.sexe;
             }
             if (this.dateNaissance !== null && this.dateNaissance !== personModif.dateNaissance) {
-                personModif.dateNaissance = this.dateNaissance.toLocaleDateString('fr', {day: 'numeric', month: 'long', year: 'numeric'});
+                personModif.dateNaissance = this.dateNaissance.toLocaleDateString('fr', { day: 'numeric', month: 'long', year: 'numeric' });
             }
             if (this.dateMort !== null && this.dateMort !== personModif.dateMort) {
-                personModif.dateMort = this.dateMort.toLocaleDateString('fr', {day: 'numeric', month: 'long', year: 'numeric'})
+                personModif.dateMort = this.dateMort.toLocaleDateString('fr', { day: 'numeric', month: 'long', year: 'numeric' })
             }
             if (this.pere !== personModif.pere) {
                 // On enlève la personne modifiée des enfants de l'ancien père renseigné, si il existe.

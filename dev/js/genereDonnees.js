@@ -12,15 +12,13 @@ function genere() {
         "prenom": "Alexis",
         "dateNaissance": "13/10/1999",
         "dateMort": "",
-        "listEnfant": [{
-            "id": 4
-        }],
+        "enfants": [4],
         "idPere": -1,
         "idMere": -1,
-        "listMariage": [{
-            "id": 2,
-            "dateDebut": "12/04/2020",
-            "dateFin": ""
+        "mariages": [{
+            "maryId": 2,
+            "mariageDate": "12/04/2020",
+            "divorceDate": ""
         }]
     };
     let personne2 = {
@@ -29,15 +27,13 @@ function genere() {
         "prenom": "Miguela",
         "dateNaissance": "13/12/1999",
         "dateMort": "",
-        "listEnfant": [{
-            "id": 4
-        }],
+        "enfants": [4],
         "idPere": 3,
         "idMere": -1,
-        "listMariage": [{
-            "id": 1,
-            "dateDebut": "12/04/2020",
-            "dateFin": ""
+        "mariages": [{
+            "maryId": 1,
+            "mariageDate": "12/04/2020",
+            "divorceDate": ""
         }]
     };
     let personne3 = {
@@ -46,16 +42,10 @@ function genere() {
         "prenom": "Grand père",
         "dateNaissance": "13/12/1959",
         "dateMort": "",
-        "listEnfant": [{
-                "id": 2
-            },
-            {
-                "id": 5
-            }
-        ],
+        "enfants": [2, 5],
         "idPere": -1,
         "idMere": -1,
-        "listMariage": []
+        "mariages": []
     };
     let personne4 = {
         "id": 4,
@@ -63,10 +53,10 @@ function genere() {
         "prenom": "Fils",
         "dateNaissance": "13/12/2009",
         "dateMort": "",
-        "listEnfant": [],
+        "enfants": [],
         "idPere": 1,
         "idMere": 2,
-        "listMariage": []
+        "mariages": []
     };
     let personne5 = {
         "id": 5,
@@ -74,12 +64,10 @@ function genere() {
         "prenom": "Frere",
         "dateNaissance": "13/10/1999",
         "dateMort": "",
-        "listEnfant": [{
-            "id": 6
-        }],
+        "enfants": [6],
         "idPere": 3,
         "idMere": -1,
-        "listMariage": []
+        "mariages": []
     };
     let personne6 = {
         "id": 6,
@@ -87,10 +75,10 @@ function genere() {
         "prenom": "Fils Frere",
         "dateNaissance": "13/12/2009",
         "dateMort": "",
-        "listEnfant": [],
+        "enfants": [],
         "idPere": 5,
         "idMere": -1,
-        "listMariage": []
+        "mariages": []
     };
-    localStorage.setItem("personnes", JSON.stringify([personne1, personne2, personne3, personne4, personne5, personne6]));
+    localStorage.setItem("persons", JSON.stringify([personne1, personne2, personne3, personne4, personne5, personne6]));
 }

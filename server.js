@@ -2,30 +2,31 @@ var express = require('express');
 var app = express();
 var port = 8080;
 
-app.listen(port, function () {
+app.listen(port, function() {
     console.log('la machine est en route sur le port ' + port);
 })
 
 app.use('/images', express.static('./assets/images/'));
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
     res.sendFile('./index.html', {
         root: __dirname
     });
-}).get('/add', function (req, res) {
+}).get('/add', function(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
     res.sendFile('./views/addPerson.html', {
         root: __dirname
     });
-}).get('/edit', function (req, res) {
+}).get('/edit', function(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
     res.sendFile('./views/editPerson.html', {
         root: __dirname,
     });
+
 }).get('/infos', function (req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
@@ -42,7 +43,7 @@ app.get('/', function (req, res) {
     });
 })
 
-.get('/about', function (req, res) {
+.get('/about', function(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
     res.sendFile('./views/about.html', {
@@ -53,7 +54,13 @@ app.get('/', function (req, res) {
 .get('/css', function(req, res) {
     res.setHeader('Content-Type', 'text/css; charset=UTF-8');
     res.status(200);
-    res.sendFile('./dev/css/style.css', {root: __dirname});
+    res.sendFile('./dev/css/style.css', { root: __dirname });
+})
+
+.get('/css/arbre', function(req, res) {
+    res.setHeader('Content-Type', 'text/css; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/css/style_arbre.css', { root: __dirname });
 })
 
 .get('/arbreCss', function(req, res) {
@@ -65,31 +72,31 @@ app.get('/', function (req, res) {
 .get('/font', function(req, res) {
     res.setHeader('Content-Type', 'text/css; charset=UTF-8');
     res.status(200);
-    res.sendFile('./dev/css/font.css', {root: __dirname });
+    res.sendFile('./dev/css/font.css', { root: __dirname });
 })
 
 .get('/Kamila', function(req, res) {
     res.setHeader('Content-Type', 'text/css; charset=UTF-8');
     res.status(200);
-    res.sendFile('./assets/font/Kamila-DEMO-Regular.otf', {root: __dirname });
+    res.sendFile('./assets/font/Kamila-DEMO-Regular.otf', { root: __dirname });
 })
 
 .get('/vue', function(req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
-    res.sendFile('./dev/js/vue.js', {root: __dirname });
+    res.sendFile('./dev/js/vue.js', { root: __dirname });
 })
 
 .get('/addPerson', function(req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
-    res.sendFile('./dev/js/addPerson.js', {root: __dirname });
+    res.sendFile('./dev/js/addPerson.js', { root: __dirname });
 })
 
 .get('/editPerson', function(req, res) {
     res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
     res.status(200);
-    res.sendFile('./dev/js/editPerson.js', {root: __dirname });
+    res.sendFile('./dev/js/editPerson.js', { root: __dirname });
 })
 
 .get('/deletePerson', function(req, res) {
@@ -122,3 +129,8 @@ app.get('/', function (req, res) {
     res.sendFile('./dev/js/genereArbre.js', {root: __dirname});
 });
 
+.get('/pagination', function(req, res) {
+    res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./dev/js/pagination.js', { root: __dirname });
+});
