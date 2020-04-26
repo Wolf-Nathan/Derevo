@@ -18,9 +18,7 @@ let arbre = new Vue({
             },
             methods: {
                 creerArbreAsc(idCurrent, createElement) {
-                    console.log('current Asc : ', idCurrent);
                     var currentP = this.findPersonne(idCurrent);
-
                     if ((currentP.pere < 0 && currentP.mere < 0) || (currentP.pere == null && currentP.mere == null)) {
                         return this.creerArbreDesc(idCurrent, createElement);
                     } else {
@@ -82,7 +80,7 @@ let arbre = new Vue({
                 },
                 findPersonne(needle) {
                     for (var i = 0; i < this.personnes.length; i++) {
-                        if (this.personnes[i].id == needle) {
+                        if (this.personnes[i].id != null && this.personnes[i].id == needle) {
                             return this.personnes[i];
                         }
                     }
