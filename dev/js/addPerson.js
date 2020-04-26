@@ -57,16 +57,19 @@ let formModele = new Vue({
                 alert("Merci d'indiquer une date de mariage !");
             }
         },
+        removeSelectChilds: function () {
+            this.enfants = [];
+        },
         addPerson: function () {
             // ICI, recuperer les valeurs des champs et instancier l'individu dans le LS.
             //Pour recuperer les date des datePicker: this.dateNaissance par exmple (v-model)
             //Verifie que les champs ne soient pas vide ;)
-            if(this.prenom !== null && this.nom !== null) {
+            if(this.prenom !== null && this.nom !== null && this.sexe !== null) {
                 var person = {
                     id: null,
                     prenom: this.prenom,
                     nom: this.nom,
-                    sexe: this.sexe ?? null,
+                    sexe: this.sexe,
                     dateNaissance: this.dateNaissance ? this.dateNaissance.toLocaleDateString('fr', {day: 'numeric', month: 'long', year: 'numeric'}) : null,
                     dateMort: this.dateMort ? this.dateMort.toLocaleDateString('fr', {day: 'numeric', month: 'long', year: 'numeric'}) : null,
                     pere: this.pere ?? null,
@@ -94,13 +97,13 @@ let formModele = new Vue({
                 }
                 this.persons[person.id] = person;
 
-                if(this.pere) {
+                if(this.pere || this.pere === 0) {
                     this.persons[this.pere].enfants.push(person.id);
                 }
-                if(this.mere) {
+                if(this.mere || this.mere === 0) {
                     this.persons[this.mere].enfants.push(person.id);
                 }
-                if(this.enfants && this.sexe) {
+                if(this.enfants) {
                     if(this.sexe === 'H') {
                         this.enfants.forEach(enfant => {
                             this.persons[enfant].pere = person.id;
@@ -127,7 +130,7 @@ let formModele = new Vue({
                 this.done = true;
             }
             else{
-                alert("Merci de renseigner un nom et un prénom pour enregistrer l'individu !")
+                alert("Merci de renseigner un nom, un prénom et un sexe pour enregistrer l'individu !")
             }
 
             //this.done == true quand l'enregistrement a bein été fait :)

@@ -5,6 +5,7 @@ let formModele = new Vue({
     data: {
         fr: vdp_translation_fr.js,
         done: false,
+        goodId : true,
         persons: null,
         personModif: { nom: "Nom" },
         nom: null,
@@ -27,18 +28,26 @@ let formModele = new Vue({
                 this.persons = JSON.parse(localStorage.getItem('persons'));
                 const urlParams = new URLSearchParams(window.location.search);
                 personModif = this.persons[urlParams.get('id')];
-                this.nom = personModif.nom;
-                this.prenom = personModif.prenom;
-                this.sexe = personModif.sexe ? ? null;
-                this.dateNaissance = personModif.dateNaissance ? ? null;
-                this.dateMort = personModif.dateMort ? ? null;
-                this.pere = personModif.pere ? ? null;
-                this.mere = personModif.mere ? ? null;
-                this.enfants = personModif.enfants ? ? [];
-                this.mariages = personModif.mariages;
-            } catch (e) {
+                if (personModif && personModif.id >= 0) {
+                    this.nom = personModif.nom;
+                    this.prenom = personModif.prenom;
+                    this.sexe = personModif.sexe;
+                    this.dateNaissance = personModif.dateNaissance ?? null;
+                    this.dateMort = personModif.dateMort ?? null;
+                    this.pere = personModif.pere ?? null;
+                    this.mere = personModif.mere ?? null;
+                    this.enfants = personModif.enfants ?? [];
+                    this.mariages = personModif.mariages;
+                }
+                else {
+                    this.goodId = false;
+                }
+            } catch(e) {
                 localStorage.removeItem('persons');
             }
+        }
+        else {
+            this.goodId = false;
         }
     },
     methods: {
@@ -74,7 +83,10 @@ let formModele = new Vue({
                 alert("Merci d'indiquer une date de mariage !");
             }
         },
-        editPerson: function() {
+        removeSelectChilds : function () {
+            this.enfants = [];
+        },
+        editPerson: function () {
             if (this.nom !== null && this.nom !== personModif.nom) {
                 personModif.nom = this.nom;
             }
@@ -113,6 +125,44 @@ let formModele = new Vue({
             // Comment gérer la modification des enfants ?
             // Car pour chaque changement il faudra gérer l'ajout/ la suppression du parent pour l'individu.
             //personModif.enfants = this.enfants;
+            // On boucle sur tout les enfants du tableau de base de la personne modifiée,
+            // on regarde pour chaque enfant si il est dans le tableau this.enfants, si il n'y est
+            // pas c'est qu'il a été enlevé et donc ensuite on enlève son père ou sa mère selon le sexe.
+            // Puis on boucle sur this.enfants et on regarde pour chaque enfant si il y est dans person.modif
+            // si il y est pas c'est que l'enfant vient d'être ajouté et donc on lui rajoute en tant que pere ou
+            // mere la personne modifiée.
+
+            // On enlève la personModif des parents dont on lui a enlevé la filiation
+            personModif.enfants.forEach(enfantId => {
+                if (this.enfants.indexOf(enfantId) === -1) {
+                    var enfant = this.persons[enfantId];
+                    if (personModif.sexe === 'H'){
+                        enfant.pere = null;
+                    }
+                    else {
+                        enfant.mere = null;
+                    }
+                    this.persons[enfantId] = enfant;
+                }
+            });
+
+            // On ajoute la personModif des parents dont on lui a ajouté la filiation
+            this.enfants.forEach(enfantId => {
+                if (personModif.enfants.indexOf(enfantId) === -1) {
+                    var enfant = this.persons[enfantId];
+                    if(personModif.sexe === 'H'){
+                        enfant.pere = personModif.id;
+                    }
+                    else {
+                        enfant.mere = personModif.id;
+                    }
+                    this.persons[enfantId] = enfant;
+                }
+            });
+
+            // Puis on ajoute les enfants modifiées à la personne modifiée.
+            personModif.enfants = this.enfants;
+
             personModif.mariages = this.mariages;
 
             this.persons[personModif.id] = personModif;
