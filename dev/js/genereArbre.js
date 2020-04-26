@@ -94,7 +94,7 @@ let arbre = new Vue({
             render: function(createElement) {
                 console.log(this.personnes);
 
-                return createElement("ul", [this.creerArbreAsc(this.personnes[this.selected].id, createElement)]);
+                return createElement("ul", [this.creerArbreAsc(this.selected, createElement)]);
             }
 
         }
