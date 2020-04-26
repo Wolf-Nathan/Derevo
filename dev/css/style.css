@@ -1,6 +1,5 @@
-@import '/font';
+@import '/css/font.css';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-
 .navbar {
     background-color: #52818f;
     text-align: center;
@@ -134,6 +133,7 @@ th {
     color: #fff;
 }
 
+
 /* About page */
 
 .team-member {
@@ -206,7 +206,7 @@ a i:hover {
 .team-member figure:hover figcaption {
     visibility: visible;
     color: #fff;
-    background: #52818f;    
+    background: #52818f;
     height: 100%;
     -webkit-transition: all 1s ease-in-out;
     -moz-transition: all 1s ease-in-out;
@@ -241,6 +241,7 @@ a i:hover {
     -o-transition: all 0.4s ease-in-out;
     transition: all 0.4s ease-in-out;
 }
+
 
 /* add people page */
 
@@ -282,14 +283,18 @@ a i:hover {
 .doneAddPerson {
     text-align: center;
 }
+
 .doneAddPerson>i {
     font-size: 54px;
 }
+
 .doneAddPerson>h2 {
     margin: 10px 0;
 }
 
+
 /* Style of date picker */
+
 .selected {
     color: white;
     background-color: #52818f !important;
@@ -321,7 +326,9 @@ a i:hover {
     border: 1px solid #52818f !important;
 }
 
+
 /* vueJS animation */
+
 .fade-enter-active,
 .fade-leave-active {
     transition: opacity 1s;
