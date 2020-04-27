@@ -45,6 +45,13 @@ app.get('/', function(req, res) {
     });
 })
 
+.get('/year', function (req, res) {
+    res.setHeader('Content-Type', 'text/html; charset=UTF-8');
+    res.status(200);
+    res.sendFile('./views/byYear.html', {root: __dirname});
+
+})
+
 .get('/about', function(req, res) {
     res.setHeader('Content-Type', 'text/html; charset=UTF-8');
     res.status(200);
