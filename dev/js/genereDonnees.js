@@ -1,7 +1,9 @@
 window.onload = init;
 
 function init() {
-    genere();
+    if (!localStorage.getItem('persons')) {
+        genere();
+    }
 }
 
 

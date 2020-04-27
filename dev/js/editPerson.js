@@ -71,13 +71,13 @@ let formModele = new Vue({
                 this.mariages.push({
                     "maryId": maryId,
                     "mariageDate": mariageDate,
-                    "divorceDate": divorceDate ? ? null
+                    "divorceDate": divorceDate ?? null
                 });
                 // On ajoute également le mariage au second individu
                 this.persons[maryId].mariages.push({
                     "maryId": personModif.id,
                     "mariageDate": mariageDate,
-                    "divorceDate": divorceDate ? ? null
+                    "divorceDate": divorceDate ?? null
                 });
             } else {
                 alert("Merci d'indiquer une date de mariage !");
