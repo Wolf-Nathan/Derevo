@@ -17,6 +17,7 @@ let formModele = new Vue({
         enfants: [],
         mariageNumber: 0,
         persons: null,
+        id: null
     },
     components: {
         vuejsDatepicker
@@ -128,12 +129,16 @@ let formModele = new Vue({
                 const parsed = JSON.stringify(this.persons);
                 localStorage.setItem("persons", parsed);
                 this.done = true;
+                this.id = person.id;
             }
             else{
                 alert("Merci de renseigner un nom, un prénom et un sexe pour enregistrer l'individu !")
             }
 
             //this.done == true quand l'enregistrement a bein été fait :)
+        },
+        goToTree: function () {
+            document.location.href="/infos?id=" + this.id;
         }
     }
 });
