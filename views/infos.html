@@ -49,6 +49,10 @@
                 <p v-show="dateNaissance">Né le : {{ dateNaissance}}</p>
                 <p v-show="dateMort">Mort le : {{ dateMort}}</p>
                 <p v-show="mariages.length" v-for="mariage in mariages">{{ mariage }}</p>
+                <div v-show="ancetres.length">
+                    <p>Ancêtres :</p>
+                    <p v-for="ancetre in ancetres"><a v-bind:href="ancetre.link">{{ ancetre.nom }} {{ ancetre.prenom }}</a></p>
+                </div>
             </div>
 
 

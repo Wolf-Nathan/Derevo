@@ -34,7 +34,7 @@ let arbre = new Vue({
                     var currentP = this.findPersonne(idCurrent);
                     var mariage = this.creerMariage(currentP, createElement);
 
-                    if (currentP.enfants.length == 0) {
+                    if (currentP.enfants.length === 0) {
                         console.log("pas d'enfants");
                         return createElement("li", [createElement('Personne', {
                             props: {

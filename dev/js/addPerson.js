@@ -139,6 +139,9 @@ let formModele = new Vue({
         },
         goToTree: function () {
             document.location.href="/infos?id=" + this.id;
+        },
+        newAdd: function () {
+            document.location.href="/add";
         }
     }
 });

@@ -14,6 +14,8 @@ let infosModele = new Vue({
        mere: null,
        enfants: [],
        mariages: [],
+       ancetres: [],
+       descendants: [],
        persons: null
    },
    mounted(){
@@ -62,6 +64,7 @@ let infosModele = new Vue({
                else {
                    this.mariages = [];
                }
+               this.findAncestors(personInfo);
            }
            else {
                this.goodId = false;
@@ -70,6 +73,24 @@ let infosModele = new Vue({
        }
        else {
            this.goodId = false;
+       }
+   },
+   methods: {
+       findAncestors : function(person) {
+            if(person.pere >= 0) {
+                var pere = this.persons[person.pere];
+                if(pere) {
+                    this.ancetres.push({nom: pere.nom, prenom: pere.prenom, link: "/infos?id=" + pere.id});
+                    this.findAncestors(pere);
+                }
+            }
+            if (person.mere >= 0) {
+                var mere = this.persons[person.mere];
+                if (mere) {
+                    this.ancetres.push({nom: mere.nom, prenom: mere.prenom, link: "/infos?id=" + mere.id});
+                    this.findAncestors(mere);
+                }
+            }
        }
    }
 });
