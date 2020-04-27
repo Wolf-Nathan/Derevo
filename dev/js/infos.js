@@ -51,7 +51,7 @@ let infosModele = new Vue({
                if (personInfo.mariages.length > 0) {
                     personInfo.mariages.forEach(mariage => {
                         var mary = this.persons[mariage.maryId];
-                        if(mariage.divorceDate !== null){
+                        if(mariage.divorceDate !== null && mariage.divorceDate !== ""){
                             this.mariages.push("Divorcé(e) de " + mary.nom + " " + mary.prenom + " depuis le " + mariage.divorceDate);
                         }
                         else {
