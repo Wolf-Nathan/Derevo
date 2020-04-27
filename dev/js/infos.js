@@ -65,6 +65,7 @@ let infosModele = new Vue({
                    this.mariages = [];
                }
                this.findAncestors(personInfo);
+               this.findDescendants(personInfo);
            }
            else {
                this.goodId = false;
@@ -91,6 +92,19 @@ let infosModele = new Vue({
                     this.findAncestors(mere);
                 }
             }
+       },
+       findDescendants : function(person) {
+           if(person.enfants.length > 0) {
+               person.enfants.forEach(enfantId => {
+                   enfant = this.persons[enfantId];
+                   if(enfant) {
+                       this.descendants.push({nom: enfant.nom, prenom: enfant.prenom, link: "/infos?id=" + enfant.id});
+                       if (enfant.enfants.length > 0 ) {
+                           this.findDescendants(enfant);
+                       }
+                   }
+               })
+           }
        }
    }
 });

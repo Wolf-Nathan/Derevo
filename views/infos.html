@@ -53,6 +53,10 @@
                     <p>Ancêtres :</p>
                     <p v-for="ancetre in ancetres"><a v-bind:href="ancetre.link">{{ ancetre.nom }} {{ ancetre.prenom }}</a></p>
                 </div>
+                <div v-show="descendants.length">
+                    <p>Descendant :</p>
+                    <p v-for="descendant in descendants"><a v-bind:href="descendant.link">{{ descendant.nom }} {{ descendant.prenom }}</a></p>
+                </div>
             </div>
 
 
