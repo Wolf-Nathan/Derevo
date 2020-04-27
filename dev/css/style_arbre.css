@@ -89,13 +89,15 @@ right connector from last child*/
 
 .tree li a {
     border: 1px solid #ccc;
-    padding: 5px 10px;
+    padding: 10px 15px;
     text-decoration: none;
-    color: #666;
+    color: rgb(0, 0, 0);
+    background: #d3ecfd;
+    border-top: 7px solid #0077ff;
     font-family: arial, verdana, tahoma;
-    font-size: 11px;
+    font-size: 15px;
     display: inline-block;
-    border-radius: 5px;
+    border-radius: 7px;
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
     transition: all 0.5s;
@@ -111,7 +113,7 @@ right connector from last child*/
 .tree li a:hover+ul li a {
     background: #c8e4f8;
     color: #000;
-    border: 1px solid #94a0b4;
+    border-top: 4px solid #ff1e00;
 }
 
 

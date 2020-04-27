@@ -11,8 +11,8 @@ let arbre = new Vue({
                 'Personne': {
                     props: ["nom", "prenom", "id_p"],
                     template: '<a v-bind:href="\'infos?id=\' + id_p">' +
-                        '{{nom}}' +
-                        '<br/>{{prenom}}' +
+                        '{{nom}} ' +
+                        '{{prenom}}' +
                         '</a>'
                 }
             },
