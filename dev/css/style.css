@@ -7,6 +7,7 @@
     position: fixed;
     width: 100%;
     padding: 1rem;
+    z-index: 666;
 }
 
 body {
@@ -385,11 +386,11 @@ a i:hover {
 
 /* Infos page */
 #arbre {
-    width: 60%;
+    width: 100%;
 }
 
 #infos {
-    width: 40%;
+    width: 60%;
     background-color: #d3ecfd;
     border-radius: 5px;
     padding: 15px 25px;

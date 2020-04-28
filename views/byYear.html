@@ -42,9 +42,12 @@
                             <label for="year" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000"> Entrez l'année de recherche</label>
                             <input type="text" v-model="year" class="form-control" id="year" placeholder="Année" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
                         </div>
-                        <div v-on:click="searchByYear" class="button yearFormSub" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">Rechercher</div>
+                        <div class="d-flex justify-content-center">
+                            <div v-on:click="searchByYear" class="button yearFormSub ml-2 mr-2" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">Rechercher</div>
+                            <a href="/" class="button yearFormSub text-decoration-none text-light ml-2 mr-2" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">Accueil</a>
+                        </div>
                     </form>
-                    <div v-if="activeSearch" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
+                    <div v-if="activeSearch" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000" class="mt-5">
                         <div v-if="alivePersons.length"data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
                             <p data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000"> Individus vivants cette année : </p>
                             <table id="tableYearResult" class="table table-striped col-12" id="table-id" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
