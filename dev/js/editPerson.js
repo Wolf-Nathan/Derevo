@@ -17,7 +17,8 @@ let formModele = new Vue({
         mere: null,
         enfants: [],
         mariages: [],
-        addMariage: false
+        addMariage: false,
+        id : 0
     },
     components: {
         vuejsDatepicker
@@ -29,6 +30,7 @@ let formModele = new Vue({
                 const urlParams = new URLSearchParams(window.location.search);
                 personModif = this.persons[urlParams.get('id')];
                 if (personModif && personModif.id >= 0) {
+                    this.id = personModif.id;
                     this.nom = personModif.nom;
                     this.prenom = personModif.prenom;
                     this.sexe = personModif.sexe;
@@ -170,6 +172,9 @@ let formModele = new Vue({
             const parsed = JSON.stringify(this.persons);
             localStorage.setItem("persons", parsed);
             this.done = true;
-        }
+        },
+        goToTree: function () {
+            document.location.href="/infos?id=" + this.id;
+        },
     }
 });

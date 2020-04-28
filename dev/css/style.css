@@ -245,6 +245,10 @@ a i:hover {
 
 /* add people page */
 
+.center {
+    margin: auto;
+}
+
 .z-index-back {
     z-index: -1 !important;
 }
@@ -290,6 +294,10 @@ a i:hover {
 
 .doneAddPerson>h2 {
     margin: 10px 0;
+}
+
+#rmSelectedChild {
+    margin-top: 10px;
 }
 
 
@@ -339,6 +347,42 @@ a i:hover {
     opacity: 0;
 }
 
+/* search by year page */
+.divByYear {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    padding-top: 0 !important;
+}
+
+#yearForm {
+    text-align: center;
+}
+
+.yearForm>input {
+    width: 15em;
+    margin: auto;
+}
+
+.yearFormSub {
+    margin: auto;
+}
+
+#tableYearResult {
+    width: 35em;
+}
+
+.linkInfosPerson> i {
+    color: #52818f;
+}
+
+.fa-eye {
+    font-size: large;
+}
+
 /* Infos page */
 #arbre {
     width: 60%;
@@ -350,4 +394,29 @@ a i:hover {
     border-radius: 5px;
     padding: 15px 25px;
     color: #000;
+}
+
+/* Delete page */
+
+#body-add-person {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    padding-top: 0 !important;
+}
+
+#deleteDiv {
+    text-align: center;
+}
+
+#deleteDiv>div {
+    display: inline-flex;
+}
+
+#deleteDiv>div>* {
+    margin: 1em;
+    width: 10em;
 }

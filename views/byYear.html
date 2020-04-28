@@ -32,23 +32,40 @@
         </div>
     </nav>
 
-    <div class="content container justify-content-center">
+    <div class="content container justify-content-center divByYear">
         <transition name="fade">
-            <div class="row col-10" id="body-add-person">
-                <h1 data-aos="fade-up" data-aos-delay="200" data-aos-duration="100">Rechercher des personnes par années</h1>
-                <div id="yearForm">
+            <div class="row col-10 justify-content-center" id="body-add-person">
+                <h1 data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">Rechercher des personnes par années</h1>
+                <div id="yearForm" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
                     <form>
-                        <div class="form-group">
-                            <label for="year"> Entrez l'année de recherche</label>
-                            <input type="text" v-model="year" class="form-control" id="year" placeholder="Année">
+                        <div class="form-group yearForm">
+                            <label for="year" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000"> Entrez l'année de recherche</label>
+                            <input type="text" v-model="year" class="form-control" id="year" placeholder="Année" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
                         </div>
-                        <div v-on:click="searchByYear" class="button">Rechercher</div>
+                        <div v-on:click="searchByYear" class="button yearFormSub" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">Rechercher</div>
                     </form>
-                    <div v-show="activeSearch">
-                        <h4>Recherche pour l'année {{ year }}</h4>
-                        <div v-show="alivePersons.length">
-                            <p> Individus vivants cette année : </p>
-                            <p v-for="person in alivePersons"><a v-bind:href="person.link">{{ person.nom }} {{ person.prenom }}</a></p>
+                    <div v-if="activeSearch" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
+                        <div v-if="alivePersons.length"data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
+                            <p data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000"> Individus vivants cette année : </p>
+                            <table id="tableYearResult" class="table table-striped col-12" id="table-id" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                                <thead data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Prénom</th>
+                                        <th>Consulter</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+                                    <tr v-for="person in alivePersons">
+                                        <td>{{ person.nom }}</td>
+                                        <td>{{ person.prenom }}</td>
+                                        <td><a :href="person.link" class="linkInfosPerson"><i class="fas fa-eye"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div v-else>
+                            <h4 data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">Personne n'était vivant cette anée la :(</h4>
                         </div>
                     </div>
                 </div>

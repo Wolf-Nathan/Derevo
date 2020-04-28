@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Supprimer un individu</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script src="https://kit.fontawesome.com/8423977a3c.js" crossorigin="anonymous"></script>
@@ -32,17 +33,15 @@
         </div>
     </nav>
 
-    <div class="content container justify-content-center">
-        <transition name="fade">
-            <div class="row col-10" id="body-add-person">
-                <h1 data-aos="fade-up" data-aos-delay="200" data-aos-duration="100">Supprimer une personne</h1>
-                <div id="deleteDiv">
-                    <h3>Voulez vous vraiment supprimer {{ prenom }} {{ nom }} ?</h3>
-                    <button v-on:click="deleteYes">Oui</button>
-                    <button v-on:click="deleteNo">Non</button>
-                </div>
+    <div class="content container justify-content-center" id="body-add-person">
+        <h1 data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">Supprimer une personne</h1>
+        <div id="deleteDiv" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+            <h3 data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">Voulez vous vraiment supprimer {{ prenom }} {{ nom }} ?</h3>
+            <div data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+                <div class="button" v-on:click="deleteNo">Non</div>
+                <div class="button" v-on:click="deleteYes">Oui</div>
             </div>
-        </transition>
+        </div>
     </div>
 
     <script src="/js/deletePerson.js"></script>

@@ -83,6 +83,9 @@ let deleteModele = new Vue({
             const parsed = JSON.stringify(this.persons);
             localStorage.setItem("persons", parsed);
             this.done = true;
+
+            //Redirecting to home page
+            location.href='/';
         },
         deleteNo: function () {
             document.location.href="/";

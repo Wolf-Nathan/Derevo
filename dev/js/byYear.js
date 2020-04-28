@@ -18,7 +18,7 @@ let yearFormModele = new Vue({
         }
     },
     methods: {
-        // On se base sur une espérance de vie de 100 ans si on ne connaît pas si on ne connait qu'une seule des dates de naissance et de mort.
+        // On se base sur une espérance de vie de 100 ans si on ne connait qu'une seule des dates de naissance et de mort.
         searchByYear: function () {
             this.activeSearch = true;
             this.alivePersons = [];
