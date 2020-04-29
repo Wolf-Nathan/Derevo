@@ -21,14 +21,14 @@ Rendez-vous sur http://localhost:8080/ pour commencer a utilisé Derevo.
 ### Accueil
 http://localhost:8080/
 
-Ici, vous retrouverez l'intégralité de vos individus. Une section recherche permet de retrouver dynamiquement un ou plusieurs utilisateur(s).
+Ici, vous retrouverez l'intégralité de vos individus. Une section recherche permet de retrouver dynamiquement un ou plusieur(s) utilisateur(s).
 
 Cette page est accessible depuis n'importe quelle page depuis la barre de navigation en cliquant sur "Derevo".
 
 ### Ajout d'un individu
 http://localhost:8080/add
 
-Cette page vous permet de créer un utilisateur et de lui définir l'intégralité de ses paramètres (Identité, sexe, date de naissance & mort, enfants, parents et mariage(s).
+Cette page vous permet de créer un utilisateur et de lui définir l'intégralité de ses paramètres (Identité, sexe, date de naissance & mort, enfant(s), parent(s) et mariage(s).
 
 Cette page est accessible depuis n'importe quelle page depuis la barre de navigation.
 
@@ -56,7 +56,7 @@ Cette page est accessible depuis la page d'accueil en appuyant sur "<img src="ht
 ### Recherche par année
 http://localhost:8080/year
 
-Cette page permet de retrouver les individus étant né une certaine année.
+Cette page permet de retrouver les individus étant nés une certaine année.
 
 Cette page est accessible depuis la page d'accueil en appuyant sur "Recherche par année".
 
