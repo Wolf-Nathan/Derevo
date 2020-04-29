@@ -1,7 +1,7 @@
 # Derevo
 Arbre généalogique utilisant Vue.js & Node.js
 
-![illus](https://raw.githubusercontent.com/Wolf-Nathan/VueJS_Project/master/assets/images/home.jpg?token=AIWPB6T2WAQLHOTOTL3SAL26VGONA)
+![illus](https://raw.githubusercontent.com/Wolf-Nathan/VueJS_Project/master/assets/images/home.jpg)
 
 ## Installation & démarrage
 
