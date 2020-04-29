@@ -11,7 +11,11 @@ Arbre généalogique utilisant Vue.js & Node.js
 ```
 ### Étape 2 : démarrage
 ``` 
-❯ nodemon server.js
+❯ npm start
+```
+ou
+``` 
+❯ node server.js
 ```
 ### Derevo est prêt a être utilisé !
 Rendez-vous sur http://localhost:8080/ pour commencer a utilisé Derevo.
