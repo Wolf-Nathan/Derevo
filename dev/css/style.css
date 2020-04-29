@@ -1,13 +1,14 @@
 @import '/css/font.css';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 .navbar {
+    z-index: 1;
     background-color: #52818f;
     text-align: center;
     margin-bottom: 0;
     position: fixed;
     width: 100%;
     padding: 1rem;
-    z-index: 666;
+    /*z-index: 666;*/
 }
 
 body {
@@ -385,7 +386,7 @@ a i:hover {
 }
 
 /* Infos page */
-#arbre {
+/* #arbre {
     width: 100%;
 }
 
@@ -395,7 +396,7 @@ a i:hover {
     border-radius: 5px;
     padding: 15px 25px;
     color: #000;
-}
+} */
 
 /* Delete page */
 
@@ -420,4 +421,61 @@ a i:hover {
 #deleteDiv>div>* {
     margin: 1em;
     width: 10em;
+}
+
+/* Page d'infos */
+
+#arbre {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    padding-top: 0 !important;
+    width: 70%;
+}
+
+#infos {
+    margin-top: 8em;
+    width: 30%;
+    height: fit-content;
+    background-color: #52818f;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+}
+
+#infosParents {
+    display: flex;
+    justify-content: center;
+}
+
+#infosParents>* {
+    margin: 10px;
+}
+
+#infosParents>div>h4 {
+    margin: 0;
+}
+
+#infosListEnfant {
+    margin: 1em auto;
+    width: 75%;
+}
+
+#infosListEnfant>thead>tr>th {
+    background-color: #67909b;
+}
+
+#infos>h1, #infos>h2, #infos>h3, #infos>h4 {
+    text-align: center;
+    color: white;
+}
+
+#infosListMariages {
+    border: 1px solid white;
+    width: fit-content;
+    padding: 1em;
+    margin: 2em auto;
 }

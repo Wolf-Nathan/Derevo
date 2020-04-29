@@ -54,10 +54,10 @@ let infosModele = new Vue({
                     personInfo.mariages.forEach(mariage => {
                         var mary = this.persons[mariage.maryId];
                         if(mariage.divorceDate !== null && mariage.divorceDate !== ""){
-                            this.mariages.push("Divorcé(e) de " + mary.nom + " " + mary.prenom + " depuis le " + mariage.divorceDate);
+                            this.mariages.unshift("Divorcé(e) de " + mary.nom + " " + mary.prenom + " depuis le " + mariage.divorceDate);
                         }
                         else {
-                            this.mariages.push("Marié(e) avec " + mary.nom + " " + mary.prenom + " depuis le " + mariage.mariageDate);
+                            this.mariages.unshift("Marié(e) avec " + mary.nom + " " + mary.prenom + " depuis le " + mariage.mariageDate);
                         }
                     })
                }

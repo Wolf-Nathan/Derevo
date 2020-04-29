@@ -30,12 +30,10 @@ let arbre = new Vue({
                     }
                 },
                 creerArbreDesc(idCurrent, createElement) {
-                    console.log('current : ', idCurrent);
                     var currentP = this.findPersonne(idCurrent);
                     var mariage = this.creerMariage(currentP, createElement);
 
                     if (currentP.enfants.length === 0) {
-                        console.log("pas d'enfants");
                         return createElement("li", [createElement('Personne', {
                             props: {
                                 nom: currentP.nom,
@@ -44,13 +42,10 @@ let arbre = new Vue({
                             }
                         }), mariage]);
                     } else {
-                        console.log("enfants");
                         var personnesCrees = [];
                         for (e of currentP.enfants) {
-                            console.log('enfant : ', e);
                             personnesCrees.push(this.creerArbreDesc(e, createElement));
                         }
-                        console.log(currentP);
 
                         return createElement("li", [createElement('Personne', {
                             props: {
@@ -65,7 +60,6 @@ let arbre = new Vue({
                     var mariage = [];
                     if (currentP.mariages.length > 0) {
                         for (f of currentP.mariages) {
-                            console.log(currentP.mariages);
                             fiance = this.findPersonne(f.maryId);
                             mariage.push(createElement('Personne', {
                                 props: {
@@ -90,8 +84,6 @@ let arbre = new Vue({
                 }
             },
             render: function(createElement) {
-                console.log(this.personnes);
-
                 return createElement("ul", [this.creerArbreAsc(this.selected, createElement)]);
             }
 
@@ -100,7 +92,6 @@ let arbre = new Vue({
     methods: {
         chargerPersonne() {
             this.personnes = JSON.parse(localStorage.getItem("persons"));
-            //console.log(this.personnes);
         },
         findSelected() {
             const urlParams = new URLSearchParams(window.location.search);

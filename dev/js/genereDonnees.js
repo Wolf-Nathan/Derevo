@@ -14,7 +14,7 @@ function genere() {
         "prenom": "Grand Mere",
         "dateNaissance": "13/10/1999",
         "dateMort": "",
-        "enfants": [2, 5],
+        "enfants": [1, 5],
         "pere": -1,
         "mere": -1,
         "mariages": [{

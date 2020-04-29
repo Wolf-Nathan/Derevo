@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Modifier un individu</title>
+    <title>Consulter un arbre</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -28,35 +28,48 @@
             </div>
 
             <div class="navbar-nav col-2">
-                <a class="nav-item nav-link active" href="/add">Ajouter un individu</a>
+                <a class="nav-item nav-link" href="/add">Ajouter un individu</a>
             </div>
         </div>
     </nav>
 
-    <div class="content">
-        <div class="row d-flex flex-column justify-content-center align-items-center">
-            <div id="infos">
-                <h5>{{ titre }} {{ nom }} {{ prenom }}</h5>
-                <p v-show="pere">Père: {{ pere }}</p>
-                <p v-show="mere">Mère: {{ mere}}</p>
-                <p v-show="enfants.length">Enfants : <span v-for="(enfant, index) in enfants"><span v-if="index > 0"> , </span>{{ enfant }}</span>
-                </p>
-                <p v-show="dateNaissance">Né le : {{ dateNaissance}}</p>
-                <p v-show="dateMort">Mort le : {{ dateMort}}</p>
-                <p v-show="mariages.length" v-for="mariage in mariages">{{ mariage }}</p>
-                <div v-show="ancetres.length">
-                    <p>Ancêtres :</p>
-                    <p v-for="ancetre in ancetres"><a v-bind:href="ancetre.link">{{ ancetre.nom }} {{ ancetre.prenom }}</a></p>
-                </div>
-                <div v-show="descendants.length">
-                    <p>Descendant :</p>
-                    <p v-for="descendant in descendants"><a v-bind:href="descendant.link">{{ descendant.nom }} {{ descendant.prenom }}</a></p>
-                </div>
+    <div class="justify-content-center">
+        <div class="ml-5 mr-5 row d-flex justify-space-between">
+            <div id="arbre" class="tree d-flex justify-content-center">
+                <Arbre v-bind:personnes='personnes' v-bind:selected='selected' data-aos="fade-up" data-aos-delay="100" data-aos-duration="2000">
+                </Arbre>
             </div>
 
-            <div id="arbre" class="tree d-flex justify-content-center">
-                <Arbre v-bind:personnes='personnes' v-bind:selected='selected'>
-                </Arbre>
+            <div id="infos" data-aos="fade-up" data-aos-delay="100" data-aos-duration="1000">
+                <h3 data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">{{ titre }} {{ nom }} {{ prenom }}</h3>
+                <div id="infosParents" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                    <div v-show="pere" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+                        <h4>{{ pere }}</h4>
+                        <p>Père</p>
+                    </div>
+                    <div v-show="mere" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">
+                        <h4>{{ mere }}</h4>
+                        <p>Mère</p>
+                    </div>
+                </div>
+                <table v-show="enfants.length" id="infosListEnfant" class="table table-striped" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+                    <thead>
+                        <tr>
+                            <th>Enfants</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(enfant, index) in enfants">
+                            <td>{{ enfant }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h4 v-show="dateNaissance" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">Né(e) le : {{ dateNaissance }}</h4>
+                <h4 v-show="dateMort" data-aos="fade-up" data-aos-delay="700" data-aos-duration="1000">Décédé le : {{ dateMort }}</h4>
+                <div v-show="mariages.length" id="infosListMariages" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1000">
+                    <h4>Liste des mariages</h4>
+                    <p v-for="mariage in mariages">{{ mariage }}</p>
+                </div>
             </div>
         </div>
     </div>
