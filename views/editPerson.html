@@ -68,7 +68,7 @@
                     <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="700" data-aos-duration="1000">
                         <label for="pere"> Père</label>
                         <select id="pere" v-model="pere" class="form-control" name="pere" :placeholder="pere">
-                        <option v-for="person in persons" :value="person.id">
+                        <option v-for="person in persons" v-if="person.nom && person.sexe === 'H'" :value="person.id">
                             {{ person.nom }} {{ person.prenom }}
                         </option>
                     </select>
@@ -77,7 +77,7 @@
                     <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1000">
                         <label for="mere"> Mère</label>
                         <select id="mere" v-model="mere" class="form-control" name="mere" :placeholder="mere">
-                        <option v-for="person in persons" :value="person.id">
+                        <option v-for="person in persons" v-if="person.nom && person.sexe === 'F'" :value="person.id">
                             {{ person.nom }} {{ person.prenom }}
                         </option>
                     </select>
@@ -86,7 +86,7 @@
                     <div class="form-group col-sm-6 z-index-back" data-aos="fade-up" data-aos-delay="900" data-aos-duration="1000">
                         <label for="enfants"> Enfants de {{ nom }} {{ prenom }}</label>
                         <select id="enfants" class="form-control" name="enfants" multiple="multiple" v-model="enfants" :placeholder="enfants">
-                        <option v-for="person in persons" :value="person.id">
+                        <option v-for="person in persons" v-if="person.nom" :value="person.id">
                             {{ person.nom }} {{ person.prenom }}
                         </option>
                     </select>
@@ -101,7 +101,7 @@
                                 <div class="form-group">
                                     <label for="mary"> Sélectionner le mari/la femme de la personne</label>
                                     <select id="mary" v-model="mary" class="form-control" name="mary">
-                                    <option v-for="person in persons" :value="person.id">
+                                    <option v-for="person in persons" v-if="person.nom" :value="person.id">
                                         {{ person.nom }} {{ person.prenom }}
                                     </option>
                                 </select>
