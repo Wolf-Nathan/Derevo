@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Supprimer un individu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://kit.fontawesome.com/8423977a3c.js" crossorigin="anonymous"></script>
+    <script src="/js/vue.js"></script>
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="https://unpkg.com/vuejs-datepicker/dist/locale/translations/fr.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body class="add-form-body bg-primary">
+    <nav class="navbar navbar-dark">
+        <div class="container justify-content-center">
+            <div class="navbar-nav col-2">
+                <a class="nav-item nav-link" href="/about">À propos</a>
+            </div>
+
+            <div class="navbar-nav col-2">
+                <a class="navbar-brand logo" href="/">Derevo</a>
+            </div>
+
+            <div class="navbar-nav col-2">
+                <a class="nav-item nav-link active" href="/add">Ajouter un individu</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content container justify-content-center">
+        <transition name="fade">
+            <div class="row col-10" id="body-add-person">
+                <h1 data-aos="fade-up" data-aos-delay="200" data-aos-duration="100">Supprimer une personne</h1>
+                <div id="deleteDiv">
+                    <h3>Voulez vous vraiment supprimer {{ prenom }} {{ nom }} ?</h3>
+                    <button v-on:click="deleteYes">Oui</button>
+                    <button v-on:click="deleteNo">Non</button>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script src="/js/deletePerson.js"></script>
+
+</body>
+
+</html>

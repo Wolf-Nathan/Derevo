@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier un individu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style_arbre.css">
+    <script src="https://kit.fontawesome.com/8423977a3c.js" crossorigin="anonymous"></script>
+    <script src="/js/vue.js"></script>
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="https://unpkg.com/vuejs-datepicker/dist/locale/translations/fr.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+
+<body class="add-form-body bg-primary">
+    <nav class="navbar navbar-dark">
+        <div class="container justify-content-center">
+            <div class="navbar-nav col-2">
+                <a class="nav-item nav-link" href="/about">À propos</a>
+            </div>
+
+            <div class="navbar-nav col-2">
+                <a class="navbar-brand logo" href="/">Derevo</a>
+            </div>
+
+            <div class="navbar-nav col-2">
+                <a class="nav-item nav-link active" href="/add">Ajouter un individu</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content justify-content-center">
+        <div class="ml-5 mr-5 row d-flex justify-space-between">
+            <div id="arbre" class="tree d-flex justify-content-center">
+                <Arbre v-bind:personnes='personnes' v-bind:selected='selected'>
+                </Arbre>
+            </div>
+
+            <div id="infos">
+                <h5>{{ titre }} {{ nom }} {{ prenom }}</h5>
+                <p v-show="pere">Père: {{ pere }}</p>
+                <p v-show="mere">Mère: {{ mere}}</p>
+                <p v-show="enfants.length">Enfants : <span v-for="(enfant, index) in enfants"><span v-if="index > 0"> , </span>{{ enfant }}</span>
+                </p>
+                <p v-show="dateNaissance">Né le : {{ dateNaissance}}</p>
+                <p v-show="dateMort">Mort le : {{ dateMort}}</p>
+                <p v-show="mariages.length" v-for="mariage in mariages">{{ mariage }}</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/genereDonnees.js"></script>
+    <script src="/js/genereArbre.js"></script>
+    <script src="/js/infos.js"></script>
+
+</body>
+
+</html>
