@@ -431,7 +431,6 @@ a i:hover {
     height: 40vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 }
 
 #arbre {
