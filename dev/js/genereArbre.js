@@ -61,13 +61,15 @@ let arbre = new Vue({
                     if (currentP.mariages.length > 0) {
                         for (f of currentP.mariages) {
                             fiance = this.findPersonne(f.maryId);
-                            mariage.push(createElement('Personne', {
-                                props: {
-                                    nom: fiance.nom,
-                                    prenom: fiance.prenom,
-                                    id_p: fiance.id
-                                }
-                            }));
+                            if (fiance) {
+                                mariage.push(createElement('Personne', {
+                                    props: {
+                                        nom: fiance.nom,
+                                        prenom: fiance.prenom,
+                                        id_p: fiance.id
+                                    }
+                                }));
+                            }
                         }
                     }
                     return mariage;
