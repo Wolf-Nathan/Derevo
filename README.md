@@ -7,7 +7,7 @@ Arbre généalogique utilisant Vue.js & Node.js
 
 ### Étape 1 : Installation
 ``` 
-❯ git clone https://github.com/Wolf-Nathan/VueJS_Project.git
+❯ git clone https://github.com/Wolf-Nathan/Derevo.git
 ```
 ### Étape 2 : démarrage
 ``` 
