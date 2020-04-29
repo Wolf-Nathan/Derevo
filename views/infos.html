@@ -59,8 +59,32 @@
                         </tr>
                     </tbody>
                 </table>
+                <table v-show="ancetres.length" id="infosListAncetre" class="table table-striped" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+                    <thead>
+                    <tr>
+                        <th>Ancêtres</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(ancetre, index) in ancetres">
+                        <td><a v-bind:href="ancetre.link">{{ ancetre.nom }} {{ ancetre.prenom }}</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <table v-show="descendants.length" id="infosListDescendant" class="table table-striped" data-aos="fade-up" data-aos-delay="500" data-aos-duration="1000">
+                    <thead>
+                    <tr>
+                        <th>Descendants</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(descendant, index) in descendants">
+                        <td><a v-bind:href="descendant.link">{{ descendant.nom }} {{ descendant.prenom }}</a></td>
+                    </tr>
+                    </tbody>
+                </table>
                 <h4 v-show="dateNaissance" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">Né(e) le : {{ dateNaissance }}</h4>
-                <h4 v-show="dateMort" data-aos="fade-up" data-aos-delay="700" data-aos-duration="1000">Décédé le : {{ dateMort }}</h4>
+                <h4 v-show="dateMort" data-aos="fade-up" data-aos-delay="700" data-aos-duration="1000">Décédé(e) le : {{ dateMort }}</h4>
                 <div v-show="mariages.length" id="infosListMariages" data-aos="fade-up" data-aos-delay="800" data-aos-duration="1000">
                     <h4>Liste des mariages</h4>
                     <p v-for="mariage in mariages">{{ mariage }}</p>

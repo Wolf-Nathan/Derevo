@@ -469,6 +469,16 @@ a i:hover {
     background-color: #67909b;
 }
 
+#infosListAncetre>tbody>tr>td>a {
+    color: black;
+    text-decoration: none;
+}
+
+#infosListDescendant>tbody>tr>td>a {
+    color: black;
+    text-decoration: none;
+}
+
 #infos>h1, #infos>h2, #infos>h3, #infos>h4 {
     text-align: center;
     color: white;
