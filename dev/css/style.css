@@ -429,14 +429,12 @@ a i:hover {
     overflow: auto;
     width: 100vw;
     height: 40vh;
-}
-
-#arbre {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    text-align: center;
+}
+
+#arbre {
     padding-top: 0 !important;
     width: max-content;
     margin-top: 2em;
