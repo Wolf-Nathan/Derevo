@@ -425,6 +425,12 @@ a i:hover {
 
 /* Page d'infos */
 
+#container-arbre{
+    overflow: auto;
+    width: 100vw;
+    height: 40vh;
+}
+
 #arbre {
     display: flex;
     flex-direction: column;
@@ -432,7 +438,7 @@ a i:hover {
     align-items: center;
     text-align: center;
     padding-top: 0 !important;
-    width: 100%;
+    width: max-content;
     margin-top: 2em;
 }
 

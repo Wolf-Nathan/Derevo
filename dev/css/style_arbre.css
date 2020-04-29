@@ -88,12 +88,13 @@ right connector from last child*/
 }
 
 .tree li a {
-    border: 1px solid #52818f;
-    padding: 1.5em;
+    border: 1px solid #ccc;
+    padding: 10px 15px;
     text-decoration: none;
     color: rgb(0, 0, 0);
     background: #d3ecfd;
-    border-top: 7px solid #52818f;
+    border-top: 7px solid #0077ff;
+    font-family: arial, verdana, tahoma;
     font-size: 15px;
     display: inline-block;
     border-radius: 7px;
@@ -112,7 +113,7 @@ right connector from last child*/
 .tree li a:hover~ul li a {
     background: #c8e4f8;
     color: #000;
-    border-top: 7px solid green;
+    border-top: 4px solid #ff1e00;
 }
 
 
