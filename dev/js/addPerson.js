@@ -15,7 +15,6 @@ let formModele = new Vue({
         pere: null,
         mere: null,
         enfants: [],
-        mariageNumber: 0,
         persons: null,
         id: null
     },
@@ -42,7 +41,6 @@ let formModele = new Vue({
             this.addMariage = false;
         },
         validMary: function () {
-            this.mariageNumber++ ;
             var maryId = document.getElementById("mary").value;
             var mariageDate = document.getElementById("mariageDate").value;
             var divorceDate = document.getElementById("divorceDate").value;
@@ -62,9 +60,6 @@ let formModele = new Vue({
             this.enfants = [];
         },
         addPerson: function () {
-            // ICI, recuperer les valeurs des champs et instancier l'individu dans le LS.
-            //Pour recuperer les date des datePicker: this.dateNaissance par exmple (v-model)
-            //Verifie que les champs ne soient pas vide ;)
             if(this.prenom !== null && this.nom !== null && this.sexe !== null) {
                 var person = {
                     id: null,
@@ -79,18 +74,7 @@ let formModele = new Vue({
                     mariages: this.mariages ?? null
                 };
                 if(this.persons){
-                    /*var lastPerson = this.persons[this.persons.length - 1];
-                    person.id = lastPerson.id + 1;*/
                     person.id = this.persons.length;
-
-                    /* fonctionne pas
-                     // On récupère la dernière personne du tableau
-                     var reversePersons = this.persons;
-                     reversePersons.reverse();
-                     var lastPerson = reversePersons.shift();
-                     // Puis on incrémente l'id de cette personne pour déterminer l'id du nouvel individu
-                     person.id = lastPerson.id + 1;
-                     */
                 }
                 else {
                     person.id = 0;
@@ -134,8 +118,6 @@ let formModele = new Vue({
             else{
                 alert("Merci de renseigner un nom, un prénom et un sexe pour enregistrer l'individu !")
             }
-
-            //this.done == true quand l'enregistrement a bein été fait :)
         },
         goToTree: function () {
             document.location.href="/infos?id=" + this.id;
