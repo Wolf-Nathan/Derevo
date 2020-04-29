@@ -1,12 +1,13 @@
-<html lang="en">
-
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Derevo</title>
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css'>
     <link rel="stylesheet" href="/css/style.css">
+    
     <script src="https://kit.fontawesome.com/8423977a3c.js" crossorigin="anonymous"></script>
     <script src="/js/vue.js"></script>
 </head>
@@ -31,7 +32,7 @@
     <div class="content row justify-content-center">
 
         <div class="row col-10">
-            <img class="familly-image" src="images/home.jpg" />
+            <img class="familly-image" src="images/home.jpg" alt="familly-image"/>
         </div>
 
         <div class="row col-10 justify-content-center">
@@ -39,12 +40,13 @@
 
             <!-- Filters -->
             <div class="header_wrap col-11">
-                <div class="num_rows col-1">
+                <div class="num_rows col-2">
                     <div class="form-group">
                         <select class="form-control" name="state" id="maxRows">
 							<option value="5">5</option>
 							<option value="10">10</option>
-							<option value="25">25</option>
+                            <option value="25">25</option>
+                            <option value="5000" selected>All</option>
 						</select>
                     </div>
                 </div>
@@ -54,16 +56,14 @@
             </div>
 
             <!-- Table -->
-            <table id="table" class="table table-striped col-11" id="table-id">
+            <table id="table-id" class="table table-striped col-11">
                 <thead>
                     <tr>
-                        <th>Nom</th>
-                        <th>Prénom</th>
-                        <th>Date de naissance</th>
-                        <th>Sexe</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th colspan="1">Nom</th>
+                        <th colspan="1">Prénom</th>
+                        <th colspan="1">Date de naissance</th>
+                        <th colspan="1">Sexe</th>
+                        <th colspan="3">Actions</th>
                     </tr>
                 </thead>
                 <tbody v-if="persons">
@@ -81,27 +81,29 @@
                     </tr>
                 </tbody>
                 <tbody v-else>
-                    <td colspan="4">Veuillez <a href="/add">ajouter</a> une personne</td>
+                    <td colspan="7">Veuillez <a href="/add">ajouter</a> une personne</td>
                 </tbody>
             </table>
             <!-- Start Pagination -->
             <div class='pagination-container'>
                 <nav>
                     <ul class="pagination">
-                        <!-- Here the JS Function Will Add the Rows -->
+                        <!--	Here the JS Function Will Add the Rows -->
                     </ul>
                 </nav>
             </div>
-            <div class="rows_count"></div>
         </div>
     </div>
+
+    
+
 
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
     <script src="/js/pagination.js"></script>
     <script>
         let maryFormModele = new Vue({
-            el: "#table",
+            el: "#table-id",
             data: {
                 persons: null,
             },
