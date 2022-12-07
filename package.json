@@ -19,7 +19,7 @@
   "homepage": "https://github.com/Wolf-Nathan/VueJS_Project#readme",
   "dependencies": {
     "continuation-local-storage": "^3.2.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "vuejs-datepicker": "^1.6.2"
   },
   "devDependencies": {}
