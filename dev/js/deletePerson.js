@@ -58,23 +58,11 @@ let deleteModele = new Vue({
             // On parcourt tout les mariages de la personne pour supprimer les mariages concernés chez les mariés.
             personDel.mariages.forEach(mariage => {
                 // On récupère la personne mariée avec la personne supprimée.
-                var mary = this.persons[mariage.maryId];
-                // On stocke la position des mariages à supprimer dans un Array
-                var positionMariage = [];
+                const mary = this.persons[mariage.maryId];
                 // On supprime tout les mariages qui ont été faits avec la personne supprimée.
-                mary.mariages.forEach((mariageMary, index) => {
-                    if(mariageMary.maryId == this.id){
-                        alert(1);
-                        positionMariage.push(index);
-                    }
-                });
-                positionMariage.forEach(mariageToDel => {
-                    mary.mariages.splice(mariageToDel, 1);
-                });
+                mary.mariages = mary.mariages.filter(mariageMary => mariageMary.maryId !== this.id);
                 this.persons[mary.id] = mary;
             });
-            // Quand un mariage est supprimé la position des mariages changent est-ce que le comportement de la fonction est donc bien correct ?
-
 
             personDel = {
                 id: -1
