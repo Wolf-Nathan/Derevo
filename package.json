@@ -1,6 +1,6 @@
 {
-  "name": "arbre_genealogique",
-  "version": "1.0.0",
+  "name": "derevo",
+  "version": "1.1.0",
   "description": "Project of Alexis, Balzac, Ion and Nathan",
   "main": "index.js",
   "scripts": {
