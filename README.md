@@ -8,6 +8,8 @@ Arbre généalogique utilisant Vue.js & Node.js
 ### Étape 1 : Installation
 ``` 
 ❯ git clone https://github.com/Wolf-Nathan/Derevo.git
+❯ cd Derevo/
+❯ npm install
 ```
 ### Étape 2 : démarrage
 ``` 
