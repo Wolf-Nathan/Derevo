@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var port = 8080;
+var port = process.env.PORT || 8080;
 
 app.listen(port, function() {
     console.log('la machine est en route sur le port ' + port);
