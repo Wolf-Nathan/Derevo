@@ -19,8 +19,8 @@ let deleteModele = new Vue({
             try {
                 this.persons = JSON.parse(localStorage.getItem('persons'));
                 const urlParams = new URLSearchParams(window.location.search);
-                this.id = urlParams.get('id');
-                personDel = this.persons[this.id];
+                this.id = Number(urlParams.get('id'));
+                let personDel = this.persons[this.id];
                 if (personDel && personDel.nom) {
                     this.nom = personDel.nom;
                     this.prenom = personDel.prenom;
