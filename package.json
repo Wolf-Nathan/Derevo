@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wolf-Nathan/VueJS_Project.git"
+    "url": "git+https://github.com/Wolf-Nathan/Derevo.git"
   },
   "author": "Alexis, Balzac, Ion, Nathan",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Wolf-Nathan/VueJS_Project/issues"
+    "url": "https://github.com/Wolf-Nathan/Derevo/issues"
   },
-  "homepage": "https://github.com/Wolf-Nathan/VueJS_Project#readme",
+  "homepage": "https://github.com/Wolf-Nathan/Derevo#readme",
   "dependencies": {
     "continuation-local-storage": "^3.2.1",
     "express": "^5.2.1",
