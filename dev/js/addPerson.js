@@ -102,11 +102,13 @@ let formModele = new Vue({
                 }
                 if(this.mariages) {
                     this.mariages.forEach(mariage => {
-                        this.persons[mariage.maryId].mariages.push({
-                            "maryId": person.id,
-                            "mariageDate": mariage.mariageDate,
-                            "divorceDate": mariage.divorceDate ?? null
-                        });
+                        if (this.persons[mariage.maryId]) {
+                            this.persons[mariage.maryId].mariages.push({
+                                "maryId": person.id,
+                                "mariageDate": mariage.mariageDate,
+                                "divorceDate": mariage.divorceDate ?? null
+                            });
+                        }
                     })
                 }
 
