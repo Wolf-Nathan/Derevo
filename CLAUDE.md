@@ -15,12 +15,29 @@ logic runs client-side with Vue 2, and all data lives in the browser's
 npm install     # install dependencies
 npm start       # start the server (node server.js), default port 8080
 node server.js  # equivalent to npm start
+npm test        # run the Jest unit test suite (test/unit/**/*.test.js)
 ```
 
-There is no functional test suite (`npm test` is a stub that always exits
-with an error) and no working lint setup (`npm run lint` calls `eslint
-server.js` but eslint is not installed and no ESLint config exists in the
-repo) — don't rely on either command actually validating anything.
+There is no working lint setup (`npm run lint` calls `eslint server.js` but
+eslint is not installed and no ESLint config exists in the repo) — don't
+rely on it actually validating anything.
+
+### Tests (`test/`)
+
+Unit tests cover the client-side business logic in `dev/js/*.js` — the
+bidirectional relationship-sync logic in `addPerson.js`/`editPerson.js`/
+`deletePerson.js`, the recursive tree-walking in `infos.js`/
+`genereArbre.js`, and the date-range filtering in `byYear.js`. `pagination.js`
+(pure jQuery DOM manipulation) and `server.js` (static file serving only)
+are intentionally not covered.
+
+Since every `dev/js/*.js` file is a plain global-scope script with no
+exports (`new Vue({ el: '#xxx', ... })` at the top level), tests mount them
+for real inside jsdom against an empty fixture `<div id="xxx"></div>` and
+read the live instance back off `el.__vue__` (set by Vue 2 itself on
+mount) — see `test/helpers/loadScript.js`. `genereArbre.js`'s nested
+`Arbre`/`Personne` components are mounted directly with `@vue/test-utils`
+instead, since they aren't reachable through the empty-fixture approach.
 
 ## Architecture
 
