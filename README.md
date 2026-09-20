@@ -72,3 +72,20 @@ http://localhost:8080/about
 Cette page vous permet de connaître l'équipe Derevo.
 
 Cette page est accessible depuis n'importe quelle page depuis la barre de navigation.
+
+## Tests unitaires
+
+Derevo dispose d'une suite de tests unitaires (Jest) couvrant la logique
+métier client-side : synchronisation bidirectionnelle des relations (ajout/édition/suppression d'un individu), parcours de l'arbre
+généalogique et recherche par année.
+
+Pour les lancer :
+
+```
+❯ npm test
+```
+
+Les tests se trouvent dans le dossier `test/` et montent réellement les
+scripts de `dev/js/*.js` dans un environnement jsdom pour exécuter leur
+logique sans dépendre d'un serveur ni d'un navigateur.
+
