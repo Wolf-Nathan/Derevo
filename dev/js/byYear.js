@@ -31,7 +31,7 @@ let yearFormModele = new Vue({
                             this.alivePersons.push({nom: person.nom, prenom: person.prenom, link: "/infos?id=" + person.id});
                         }
                     }
-                    if (person.dateMort === null || person.dateMort === "") {
+                    else if (person.dateMort === null || person.dateMort === "") {
                         var naissanceAnnee = person.dateNaissance.split(" ")[2];
                         // Comme on ne connait pas la date de mort de l'individu on recherche si il est né dans les 100 années avant la date de recherche.
                         if (naissanceAnnee <= this.year && naissanceAnnee > this.year - 100) {
