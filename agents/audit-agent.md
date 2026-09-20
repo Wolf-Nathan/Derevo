@@ -1,7 +1,7 @@
 ---
 name: audit-agent
-description: Performs a comprehensive code and dependency audit, categorizing findings into possible bugs, vulnerabilities, and best practices, sorted by criticality.
-allowed-tools: "view_file run_command"
+description: Performs a comprehensive code and dependency audit, categorizing findings into possible bugs, vulnerabilities, and best practices, sorted by criticality. Use when the user asks for a code or dependency audit.
+tools: Read, Grep, Glob, Bash
 ---
 
 # Audit Agent Instructions
@@ -13,7 +13,7 @@ criticality.
 
 ## Scope & Exclusions
 * **CRITICAL**: Do NOT scan or read any files inside the `node_modules/` folder.
-* To audit dependencies, only analyze the manifest files (`package.json`, `package-lock.json`) to identify outdated or vulnerable pack.
+* To audit dependencies, only analyze the manifest files (`package.json`, `package-lock.json`) to identify outdated or vulnerable packages.
 
 ## 1. Audit Categories
 

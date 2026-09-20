@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint server.js"
+    "lint": "eslint server.js",
+    "sync-agents": "node scripts/sync-agents.js",
+    "prepare": "node scripts/sync-agents.js"
   },
   "repository": {
     "type": "git",
