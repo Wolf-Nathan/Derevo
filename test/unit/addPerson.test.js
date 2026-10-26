@@ -151,7 +151,7 @@ describe('addPerson.js', () => {
 
     // divorceDate ?? null only replaces null/undefined, not '' — an empty
     // input therefore stays '' rather than becoming null.
-    expect(vm.mariages).toContainEqual({ maryId: '2', mariageDate: '12 mars 2000', divorceDate: '' });
+    expect(vm.mariages).toContainEqual({ maryId: 2, mariageDate: '12 mars 2000', divorceDate: '' });
     expect(vm.addMariage).toBe(false);
   });
 

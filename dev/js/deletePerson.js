@@ -59,10 +59,14 @@ let deleteModele = new Vue({
             // On parcourt tout les mariages de la personne pour supprimer les mariages concernés chez les mariés.
             this.personDel.mariages.forEach(mariage => {
                 // On récupère la personne mariée avec la personne supprimée.
-                const mary = this.persons[mariage.maryId];
+                // Number() : tolère les anciens maryId stockés sous forme de chaîne.
+                const mary = this.persons[Number(mariage.maryId)];
+                // Le conjoint peut avoir déjà été supprimé (tombe {id: -1}) : rien à nettoyer.
+                if (!mary || !Array.isArray(mary.mariages)) {
+                    return;
+                }
                 // On supprime tout les mariages qui ont été faits avec la personne supprimée.
-                mary.mariages = mary.mariages.filter(mariageMary => mariageMary.maryId !== this.id);
-                this.persons[mary.id] = mary;
+                mary.mariages = mary.mariages.filter(mariageMary => Number(mariageMary.maryId) !== this.id);
             });
 
             this.personDel = {
