@@ -128,6 +128,58 @@ describe('addPerson.js', () => {
     expect(persons[2].enfants).toContain(4);
   });
 
+  test('choosing the same individual as pere and as enfant is refused (would create a cycle)', () => {
+    localStorage.setItem('persons', JSON.stringify(makeBasicFamily()));
+    const vm = getVm();
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.nom = 'Nouveau';
+    vm.prenom = 'Individu';
+    vm.sexe = 'H';
+    vm.pere = 2;
+    vm.enfants = [2];
+    vm.addPerson();
+
+    expect(alertSpy).toHaveBeenCalled();
+    expect(vm.done).toBe(false);
+    expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    alertSpy.mockRestore();
+  });
+
+  test('choosing an ancestor of the selected pere as enfant is refused (would create a cycle)', () => {
+    localStorage.setItem('persons', JSON.stringify(makeBasicFamily()));
+    const vm = getVm();
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.nom = 'Nouveau';
+    vm.prenom = 'Individu';
+    vm.sexe = 'H';
+    vm.pere = 4; // 4 is a grandchild of 0
+    vm.enfants = [0];
+    vm.addPerson();
+
+    expect(alertSpy).toHaveBeenCalled();
+    expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    alertSpy.mockRestore();
+  });
+
+  test('unrelated pere and enfants are still accepted by the cycle check', () => {
+    localStorage.setItem('persons', JSON.stringify(makeBasicFamily()));
+    const vm = getVm();
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.nom = 'Nouveau';
+    vm.prenom = 'Individu';
+    vm.sexe = 'H';
+    vm.pere = 0;
+    vm.enfants = [4];
+    vm.addPerson();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(vm.done).toBe(true);
+    alertSpy.mockRestore();
+  });
+
   test('a pending marriage pushes the bidirectional counterpart onto the spouse record', () => {
     localStorage.setItem('persons', JSON.stringify(makeBasicFamily()));
     const vm = getVm();

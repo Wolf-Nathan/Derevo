@@ -84,6 +84,17 @@ describe('infos.js', () => {
     expect(vm.mariages.join(' ')).not.toContain('undefined');
   });
 
+  test('cyclic parenthood data (A pere of B, B pere of A) does not recurse forever', () => {
+    const family = [
+      { id: 0, nom: 'Cycle', prenom: 'A', sexe: 'H', dateNaissance: null, dateMort: null, pere: 1, mere: null, enfants: [1], mariages: [] },
+      { id: 1, nom: 'Cycle', prenom: 'B', sexe: 'H', dateNaissance: null, dateMort: null, pere: 0, mere: null, enfants: [0], mariages: [] }
+    ];
+    const vm = getVm(family, 0);
+
+    expect(vm.ancetres.map((a) => a.prenom)).toEqual(['B']);
+    expect(vm.descendants.map((d) => d.prenom)).toEqual(['B']);
+  });
+
   test('mounted() sets the leaked global personInfo', () => {
     const vm = getVm(makeDeepAncestorChain(5), 0);
 

@@ -17,17 +17,21 @@ let arbre = new Vue({
                 }
             },
             methods: {
-                creerArbreAsc(idCurrent, createElement) {
+                // `visites` : garde-fou contre les cycles de parenté (récursion infinie).
+                creerArbreAsc(idCurrent, createElement, visites = new Set()) {
                     var currentP = this.findPersonne(idCurrent);
+                    visites.add(Number(currentP.id));
                     // Attention : `null >= 0` vaut true en JS, d'où le test explicite sur un entier.
                     var aPere = Number.isInteger(currentP.pere) && currentP.pere >= 0;
                     var aMere = Number.isInteger(currentP.mere) && currentP.mere >= 0;
-                    if (!aPere && !aMere) {
+                    var suivant = aPere ? currentP.pere : currentP.mere;
+                    if ((!aPere && !aMere) || visites.has(Number(suivant))) {
                         return this.creerArbreDesc(idCurrent, createElement);
                     }
-                    return this.creerArbreAsc(aPere ? currentP.pere : currentP.mere, createElement);
+                    return this.creerArbreAsc(suivant, createElement, visites);
                 },
-                creerArbreDesc(idCurrent, createElement) {
+                // `chemin` : personnes de la branche en cours, garde-fou contre les cycles de parenté.
+                creerArbreDesc(idCurrent, createElement, chemin = new Set()) {
                     var currentP = this.findPersonne(idCurrent);
                     var mariage = this.creerMariage(currentP, createElement);
 
@@ -41,9 +45,14 @@ let arbre = new Vue({
                         }), mariage]);
                     } else {
                         var personnesCrees = [];
+                        chemin.add(Number(currentP.id));
                         for (e of currentP.enfants) {
-                            personnesCrees.push(this.creerArbreDesc(e, createElement));
+                            if (chemin.has(Number(e))) {
+                                continue;
+                            }
+                            personnesCrees.push(this.creerArbreDesc(e, createElement, chemin));
                         }
+                        chemin.delete(Number(currentP.id));
 
                         return createElement("li", [createElement('Personne', {
                             props: {

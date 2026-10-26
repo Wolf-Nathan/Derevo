@@ -75,6 +75,30 @@ describe('genereArbre.js', () => {
     expect(names).toEqual(['Mere M', 'Enfant E']);
   });
 
+  test('cyclic parenthood data (A pere of B, B pere of A) renders without infinite recursion', () => {
+    const persons = [
+      { id: 0, nom: 'Cycle', prenom: 'A', sexe: 'H', dateNaissance: null, dateMort: null, pere: 1, mere: null, enfants: [1], mariages: [] },
+      { id: 1, nom: 'Cycle', prenom: 'B', sexe: 'H', dateNaissance: null, dateMort: null, pere: 0, mere: null, enfants: [0], mariages: [] }
+    ];
+
+    const wrapper = mountArbre(persons, 0);
+
+    const names = wrapper.findAll('a').wrappers.map((a) => a.text());
+    expect(names).toEqual(['Cycle B', 'Cycle A']);
+  });
+
+  test('a person listed among its own enfants is not rendered under itself', () => {
+    const persons = [
+      { id: 0, nom: 'Self', prenom: 'S', sexe: 'H', dateNaissance: null, dateMort: null, pere: null, mere: null, enfants: [0, 1], mariages: [] },
+      { id: 1, nom: 'Child', prenom: 'C', sexe: 'H', dateNaissance: null, dateMort: null, pere: 0, mere: null, enfants: [], mariages: [] }
+    ];
+
+    const wrapper = mountArbre(persons, 0);
+
+    const names = wrapper.findAll('a').wrappers.map((a) => a.text());
+    expect(names).toEqual(['Self S', 'Child C']);
+  });
+
   test('creerArbreDesc renders the full nested descendant chain in the right order', () => {
     const wrapper = mountArbre(makeDeepAncestorChain(5), 0);
 
