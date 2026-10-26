@@ -90,8 +90,28 @@ describe('editPerson.js', () => {
     expect(persons[2].enfants).toContain(4);
   });
 
-  test('changing the sexe of a person who has children is refused and nothing is saved', () => {
-    const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4]
+  test('changing the sexe of a parent migrates the kept children from pere to mere', () => {
+    const family = makeBasicFamily();
+    family[4].mere = null; // Luc has no mother, so Paul can become it
+    family[3].enfants = [];
+    const vm = getVm(family, 2); // sexe: H, enfants: [4]
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.editPerson();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(vm.done).toBe(true);
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].sexe).toBe('F');
+    expect(persons[2].enfants).toContain(4);
+    expect(persons[4].pere).toBe(null);
+    expect(persons[4].mere).toBe(2);
+    alertSpy.mockRestore();
+  });
+
+  test('changing the sexe is refused when a kept child already has a parent in the new role', () => {
+    const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4], and 4 already has mere: 3
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     vm.sexe = 'F';
@@ -108,7 +128,7 @@ describe('editPerson.js', () => {
     alertSpy.mockRestore();
   });
 
-  test('changing the sexe while also removing every child is still refused (children must be removed first)', () => {
+  test('changing the sexe while removing every child clears the old role, not the other parent', () => {
     const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4]
     const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
@@ -116,9 +136,11 @@ describe('editPerson.js', () => {
     vm.enfants = [];
     vm.editPerson();
 
-    expect(alertSpy).toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
     const persons = JSON.parse(localStorage.getItem('persons'));
-    expect(persons[4].pere).toBe(2);
+    expect(persons[2].sexe).toBe('F');
+    expect(persons[2].enfants).toEqual([]);
+    expect(persons[4].pere).toBe(null);
     expect(persons[4].mere).toBe(3);
     alertSpy.mockRestore();
   });
