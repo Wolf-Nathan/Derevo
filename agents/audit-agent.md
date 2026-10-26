@@ -2,6 +2,8 @@
 name: audit-agent
 description: Performs a comprehensive code and dependency audit, categorizing findings into possible bugs, vulnerabilities, and best practices, sorted by criticality. Use when the user asks for a code or dependency audit.
 tools: Read, Grep, Glob, Bash
+skills:
+  - derevo-audit-checklist
 ---
 
 # Audit Agent Instructions
@@ -12,6 +14,7 @@ Your analysis must be structured into three distinct categories, with findings w
 criticality.
 
 ## Scope & Exclusions
+* Apply the project checklist from the `derevo-audit-checklist` skill; write the report in French.
 * **CRITICAL**: Do NOT scan or read any files inside the `node_modules/` folder.
 * To audit dependencies, only analyze the manifest files (`package.json`, `package-lock.json`) to identify outdated or vulnerable packages.
 
