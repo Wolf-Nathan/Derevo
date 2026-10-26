@@ -19,15 +19,13 @@ let arbre = new Vue({
             methods: {
                 creerArbreAsc(idCurrent, createElement) {
                     var currentP = this.findPersonne(idCurrent);
-                    if ((currentP.pere < 0 && currentP.mere < 0) || (currentP.pere == null && currentP.mere == null)) {
+                    // Attention : `null >= 0` vaut true en JS, d'où le test explicite sur un entier.
+                    var aPere = Number.isInteger(currentP.pere) && currentP.pere >= 0;
+                    var aMere = Number.isInteger(currentP.mere) && currentP.mere >= 0;
+                    if (!aPere && !aMere) {
                         return this.creerArbreDesc(idCurrent, createElement);
-                    } else {
-                        if (currentP.pere >= 0 || currentP.pere != null) {
-                            return this.creerArbreAsc(currentP.pere, createElement);
-                        } else {
-                            return this.creerArbreAsc(currentP.mere, createElement);
-                        }
                     }
+                    return this.creerArbreAsc(aPere ? currentP.pere : currentP.mere, createElement);
                 },
                 creerArbreDesc(idCurrent, createElement) {
                     var currentP = this.findPersonne(idCurrent);

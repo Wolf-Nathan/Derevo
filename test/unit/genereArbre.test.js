@@ -51,6 +51,30 @@ describe('genereArbre.js', () => {
     expect(topLevelLink.text()).toBe('Chain Gen4');
   });
 
+  test('creerArbreAsc walks up through the mere when pere is null (null >= 0 trap)', () => {
+    const persons = [
+      { id: 0, nom: 'Mere', prenom: 'M', sexe: 'F', dateNaissance: null, dateMort: null, pere: null, mere: null, enfants: [1], mariages: [] },
+      { id: 1, nom: 'Enfant', prenom: 'E', sexe: 'H', dateNaissance: null, dateMort: null, pere: null, mere: 0, enfants: [], mariages: [] }
+    ];
+
+    const wrapper = mountArbre(persons, 1);
+
+    const names = wrapper.findAll('a').wrappers.map((a) => a.text());
+    expect(names).toEqual(['Mere M', 'Enfant E']);
+  });
+
+  test('creerArbreAsc walks up through the mere when pere is the -1 sentinel', () => {
+    const persons = [
+      { id: 0, nom: 'Mere', prenom: 'M', sexe: 'F', dateNaissance: null, dateMort: null, pere: -1, mere: -1, enfants: [1], mariages: [] },
+      { id: 1, nom: 'Enfant', prenom: 'E', sexe: 'H', dateNaissance: null, dateMort: null, pere: -1, mere: 0, enfants: [], mariages: [] }
+    ];
+
+    const wrapper = mountArbre(persons, 1);
+
+    const names = wrapper.findAll('a').wrappers.map((a) => a.text());
+    expect(names).toEqual(['Mere M', 'Enfant E']);
+  });
+
   test('creerArbreDesc renders the full nested descendant chain in the right order', () => {
     const wrapper = mountArbre(makeDeepAncestorChain(5), 0);
 
