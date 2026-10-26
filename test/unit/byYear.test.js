@@ -87,6 +87,25 @@ describe('byYear.js', () => {
     expect(vm.alivePersons.map((p) => p.nom)).toContain('BothKnown');
   });
 
+  test('a deleted person (tombstone {id: -1}) is skipped without throwing', () => {
+    const family = makeByYearFixture();
+    family.push({ id: -1 });
+    family.splice(1, 0, { id: -1 });
+    const vm = getVm(family);
+    vm.year = 1975;
+
+    expect(() => vm.searchByYear()).not.toThrow();
+    expect(vm.alivePersons.map((p) => p.nom)).toEqual(['BothKnown', 'BirthOnly', 'DeathOnly']);
+  });
+
+  test('a person whose dates are undefined (missing keys) never matches and does not throw', () => {
+    const vm = getVm([{ id: 0, nom: 'Partial', prenom: 'P', sexe: 'H', pere: null, mere: null, enfants: [], mariages: [] }]);
+    vm.year = 1975;
+
+    expect(() => vm.searchByYear()).not.toThrow();
+    expect(vm.alivePersons).toEqual([]);
+  });
+
   test('a person with no dates at all never matches any search', () => {
     const vm = getVm(makeByYearFixture());
     vm.year = 1975;

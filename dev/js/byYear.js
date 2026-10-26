@@ -23,15 +23,19 @@ let yearFormModele = new Vue({
             this.activeSearch = true;
             this.alivePersons = [];
             this.persons.forEach(person => {
-                if ((person.dateNaissance !== null && person.dateNaissance !== "") || (person.dateMort !== null && person.dateMort !== "")){
-                    if (person.dateNaissance === null || person.dateNaissance === "") {
+                // On ignore les personnes supprimées (tombe {id: -1}, sans nom ni dates).
+                if (!person || person.id < 0 || !person.nom) {
+                    return;
+                }
+                if (person.dateNaissance || person.dateMort) {
+                    if (!person.dateNaissance) {
                         var mortAnnee = person.dateMort.split(" ")[2];
                         // Comme on ne connait pas la date de naissance de l'individu on recherche si il est mort dans les 100 années après l'année de recherche.
                         if (mortAnnee >= this.year && mortAnnee < this.year + 100) {
                             this.alivePersons.push({nom: person.nom, prenom: person.prenom, link: "/infos?id=" + person.id});
                         }
                     }
-                    else if (person.dateMort === null || person.dateMort === "") {
+                    else if (!person.dateMort) {
                         var naissanceAnnee = person.dateNaissance.split(" ")[2];
                         // Comme on ne connait pas la date de mort de l'individu on recherche si il est né dans les 100 années avant la date de recherche.
                         if (naissanceAnnee <= this.year && naissanceAnnee > this.year - 100) {
