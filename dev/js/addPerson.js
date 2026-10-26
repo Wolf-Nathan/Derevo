@@ -61,8 +61,39 @@ let formModele = new Vue({
         removeSelectChilds: function () {
             this.enfants = [];
         },
+        // Renvoie true si les parents/enfants sélectionnés créent un cycle de parenté :
+        // un parent qui serait aussi un descendant d'un des enfants choisis
+        // (ou un enfant qui serait un ancêtre d'un des parents choisis).
+        creeUnCycle: function (selfId, pere, mere, enfants) {
+            var parents = [pere, mere].filter(p => p !== null && p !== undefined);
+            if (selfId !== null && parents.indexOf(selfId) !== -1) {
+                return true;
+            }
+            // Parcours itératif des descendants des enfants sélectionnés, avec ensemble de visités.
+            var visites = new Set();
+            var aVisiter = (enfants || []).slice();
+            while (aVisiter.length > 0) {
+                var id = aVisiter.pop();
+                if (visites.has(id)) {
+                    continue;
+                }
+                visites.add(id);
+                if (id === selfId || parents.indexOf(id) !== -1) {
+                    return true;
+                }
+                var p = this.persons ? this.persons[id] : null;
+                if (p && Array.isArray(p.enfants)) {
+                    aVisiter.push(...p.enfants);
+                }
+            }
+            return false;
+        },
         addPerson: function () {
             if(this.prenom !== null && this.nom !== null && this.sexe !== null) {
+                if (this.creeUnCycle(null, this.pere, this.mere, this.enfants)) {
+                    alert("Impossible d'enregistrer : un individu ne peut pas être à la fois l'ancêtre et le descendant d'un autre. Vérifiez le père, la mère et les enfants sélectionnés.");
+                    return;
+                }
                 var person = {
                     id: null,
                     prenom: this.prenom,

@@ -136,6 +136,67 @@ describe('editPerson.js', () => {
     alertSpy.mockRestore();
   });
 
+  describe('parenthood cycles are refused', () => {
+    let alertSpy;
+    beforeEach(() => {
+      alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    });
+    afterEach(() => {
+      alertSpy.mockRestore();
+    });
+
+    test('choosing oneself as pere is refused', () => {
+      const vm = getVm(makeBasicFamily(), 2);
+
+      vm.pere = 2;
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(vm.done).toBe(false);
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('choosing oneself as enfant is refused', () => {
+      const vm = getVm(makeBasicFamily(), 2);
+
+      vm.enfants = [4, 2];
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('choosing a descendant as pere is refused', () => {
+      const vm = getVm(makeBasicFamily(), 0); // 4 is a grandchild of 0
+
+      vm.pere = 4;
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('choosing an ancestor as enfant is refused', () => {
+      const vm = getVm(makeBasicFamily(), 4); // 0 is a grandparent of 4
+
+      vm.enfants = [0];
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('a non-cyclic edit is still accepted', () => {
+      const vm = getVm(makeBasicFamily(), 3); // F, enfants: [4]
+
+      vm.enfants = [4, 0];
+      vm.editPerson();
+
+      expect(alertSpy).not.toHaveBeenCalled();
+      expect(vm.done).toBe(true);
+    });
+  });
+
   test('mutates the leaked global personModif (regression guard for the "personDel not set as global value" bug class)', () => {
     const vm = getVm(makeBasicFamily(), 2);
 
