@@ -91,6 +91,13 @@ let formModele = new Vue({
             this.enfants = [];
         },
         editPerson: function () {
+            // Le sexe détermine si la personne est le `pere` ou la `mere` de ses enfants :
+            // le changer alors qu'elle a des enfants désynchroniserait leurs fiches.
+            if (this.sexe !== null && this.sexe !== personModif.sexe
+                && Array.isArray(personModif.enfants) && personModif.enfants.length > 0) {
+                alert("Impossible de changer le sexe d'un individu qui a des enfants. Retirez d'abord ses enfants et enregistrez, puis modifiez son sexe.");
+                return;
+            }
             if (this.nom !== null && this.nom !== personModif.nom) {
                 personModif.nom = this.nom;
             }

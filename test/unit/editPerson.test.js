@@ -90,6 +90,52 @@ describe('editPerson.js', () => {
     expect(persons[2].enfants).toContain(4);
   });
 
+  test('changing the sexe of a person who has children is refused and nothing is saved', () => {
+    const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4]
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.nom = 'Renamed';
+    vm.editPerson();
+
+    expect(alertSpy).toHaveBeenCalled();
+    expect(vm.done).toBe(false);
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].sexe).toBe('H');
+    expect(persons[2].nom).toBe('Dupont');
+    expect(persons[4].pere).toBe(2);
+    expect(persons[4].mere).toBe(3);
+    alertSpy.mockRestore();
+  });
+
+  test('changing the sexe while also removing every child is still refused (children must be removed first)', () => {
+    const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4]
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.enfants = [];
+    vm.editPerson();
+
+    expect(alertSpy).toHaveBeenCalled();
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].pere).toBe(2);
+    expect(persons[4].mere).toBe(3);
+    alertSpy.mockRestore();
+  });
+
+  test('changing the sexe of a childless person is allowed', () => {
+    const vm = getVm(makeBasicFamily(), 4); // sexe: H, enfants: []
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.editPerson();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].sexe).toBe('F');
+    alertSpy.mockRestore();
+  });
+
   test('mutates the leaked global personModif (regression guard for the "personDel not set as global value" bug class)', () => {
     const vm = getVm(makeBasicFamily(), 2);
 
