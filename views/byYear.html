@@ -40,7 +40,7 @@
                     <form>
                         <div class="form-group yearForm">
                             <label for="year" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000"> Entrez l'année de recherche</label>
-                            <input type="text" v-model="year" class="form-control" id="year" placeholder="Année" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
+                            <input type="number" v-model.number="year" class="form-control" id="year" placeholder="Année" data-aos="fade-up" data-aos-delay="300" data-aos-duration="1000">
                         </div>
                         <div class="d-flex justify-content-center">
                             <div v-on:click="searchByYear" class="button yearFormSub ml-2 mr-2" data-aos="fade-up" data-aos-delay="400" data-aos-duration="1000">Rechercher</div>
