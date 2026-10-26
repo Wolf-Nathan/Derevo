@@ -64,11 +64,13 @@ let formModele = new Vue({
         },
         validMary: function() {
             this.mariageNumber++;
-            var maryId = document.getElementById("mary").value;
+            var maryValue = document.getElementById("mary").value;
             var mariageDate = document.getElementById("mariageDate").value;
             var divorceDate = document.getElementById("divorceDate").value;
 
-            if (maryId && mariageDate) {
+            if (maryValue && mariageDate) {
+                // La valeur d'un <select> est une chaîne : on stocke l'id sous forme numérique.
+                var maryId = Number(maryValue);
                 this.addMariage = false;
                 this.mariages.push({
                     "maryId": maryId,

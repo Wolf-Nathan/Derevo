@@ -1,6 +1,7 @@
 const { loadScript } = require('../helpers/loadScript');
 const { snapshotGlobals, cleanupNewGlobals } = require('../helpers/globalLeakGuard');
 const { makeDeepAncestorChain } = require('../fixtures/persons.deep');
+const { makeBasicFamily } = require('../fixtures/persons.basic');
 
 describe('infos.js', () => {
   let globalsBefore;
@@ -64,6 +65,23 @@ describe('infos.js', () => {
     const vm = getVm(makeDeepAncestorChain(5), 0); // youngest, enfants: []
 
     expect(vm.descendants).toEqual([]);
+  });
+
+  test('mounted() lists marriages stored with a legacy string maryId', () => {
+    const family = makeBasicFamily();
+    family[2].mariages = [{ maryId: '3', mariageDate: '1 juin 1975', divorceDate: null }];
+    const vm = getVm(family, 2);
+
+    expect(vm.mariages).toEqual(['Marié(e) avec Martin Claire depuis le 1 juin 1975']);
+  });
+
+  test('mounted() skips phantom marriages pointing to a deleted person', () => {
+    const family = makeBasicFamily();
+    family[3] = { id: -1 };
+    const vm = getVm(family, 2);
+
+    expect(vm.mariages).toEqual([]);
+    expect(vm.mariages.join(' ')).not.toContain('undefined');
   });
 
   test('mounted() sets the leaked global personInfo', () => {

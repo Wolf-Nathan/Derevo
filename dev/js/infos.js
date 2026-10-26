@@ -52,7 +52,11 @@ let infosModele = new Vue({
                }
                if (personInfo.mariages.length > 0) {
                     personInfo.mariages.forEach(mariage => {
-                        var mary = this.persons[mariage.maryId];
+                        var mary = this.persons[Number(mariage.maryId)];
+                        // Mariage fantôme vers une personne supprimée (anciennes données) : on l'ignore.
+                        if (!mary || !mary.nom) {
+                            return;
+                        }
                         if(mariage.divorceDate !== null && mariage.divorceDate !== ""){
                             this.mariages.unshift("Divorcé(e) de " + mary.nom + " " + mary.prenom + " depuis le " + mariage.divorceDate);
                         }

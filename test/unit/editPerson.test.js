@@ -110,8 +110,20 @@ describe('editPerson.js', () => {
 
     vm.validMary();
 
-    expect(vm.mariages).toContainEqual({ maryId: '0', mariageDate: '5 mai 2005', divorceDate: '' });
+    expect(vm.mariages).toContainEqual({ maryId: 0, mariageDate: '5 mai 2005', divorceDate: '' });
     expect(vm.persons[0].mariages).toContainEqual({ maryId: 4, mariageDate: '5 mai 2005', divorceDate: '' });
+  });
+
+  test('validMary() + editPerson() persists maryId as a number on both sides', () => {
+    const vm = getVm(makeBasicFamily(), 4);
+    insertMaryInputs({ mary: '0', mariageDate: '5 mai 2005', divorceDate: '' });
+
+    vm.validMary();
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].mariages[0].maryId).toBe(0);
+    expect(persons[0].mariages[0].maryId).toBe(4);
   });
 
   test('validMary() alerts and does not push when mariageDate is missing', () => {
