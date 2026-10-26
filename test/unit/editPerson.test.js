@@ -65,6 +65,31 @@ describe('editPerson.js', () => {
     expect(persons[0].mere).toBe(3);
   });
 
+  test("adding a child who already had a pere removes it from the old pere's enfants[]", () => {
+    const vm = getVm(makeBasicFamily(), 0); // sexe: H, enfants: [2]; 4 has pere 2
+
+    vm.enfants = [2, 4];
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].pere).toBe(0);
+    expect(persons[0].enfants).toEqual([2, 4]);
+    expect(persons[2].enfants).not.toContain(4);
+    expect(persons[3].enfants).toContain(4);
+  });
+
+  test("adding a child who already had a mere removes it from the old mere's enfants[]", () => {
+    const vm = getVm(makeBasicFamily(), 1); // sexe: F, enfants: [2]; 4 has mere 3
+
+    vm.enfants = [2, 4];
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].mere).toBe(1);
+    expect(persons[3].enfants).not.toContain(4);
+    expect(persons[2].enfants).toContain(4);
+  });
+
   test('mutates the leaked global personModif (regression guard for the "personDel not set as global value" bug class)', () => {
     const vm = getVm(makeBasicFamily(), 2);
 

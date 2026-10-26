@@ -89,16 +89,19 @@ let formModele = new Vue({
                     this.persons[this.mere].enfants.push(person.id);
                 }
                 if(this.enfants) {
-                    if(this.sexe === 'H') {
-                        this.enfants.forEach(enfant => {
-                            this.persons[enfant].pere = person.id;
-                        });
-                    }
-                    else {
-                        this.enfants.forEach(enfant => {
-                            this.persons[enfant].mere = person.id;
-                        });
-                    }
+                    const champ = this.sexe === 'H' ? 'pere' : 'mere';
+                    this.enfants.forEach(enfant => {
+                        // On retire l'enfant des enfants de son ancien parent (même rôle), s'il en avait un.
+                        const ancien = this.persons[enfant][champ];
+                        if (ancien !== null && ancien !== undefined && ancien !== person.id
+                            && this.persons[ancien] && Array.isArray(this.persons[ancien].enfants)) {
+                            const i = this.persons[ancien].enfants.indexOf(enfant);
+                            if (i !== -1) {
+                                this.persons[ancien].enfants.splice(i, 1);
+                            }
+                        }
+                        this.persons[enfant][champ] = person.id;
+                    });
                 }
                 if(this.mariages) {
                     this.mariages.forEach(mariage => {

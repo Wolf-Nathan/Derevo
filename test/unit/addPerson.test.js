@@ -94,6 +94,40 @@ describe('addPerson.js', () => {
     expect(persons[4].pere).toBe(2);
   });
 
+  test("reassigning a child who already had a pere removes it from the old pere's enfants[]", () => {
+    localStorage.setItem('persons', JSON.stringify(makeBasicFamily())); // 4 has pere 2
+    const vm = getVm();
+
+    vm.nom = 'Nouveau';
+    vm.prenom = 'Pere';
+    vm.sexe = 'H';
+    vm.enfants = [4];
+    vm.addPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].pere).toBe(5);
+    expect(persons[5].enfants).toEqual([4]);
+    expect(persons[2].enfants).not.toContain(4);
+    // The other parent (mere) is untouched.
+    expect(persons[3].enfants).toContain(4);
+  });
+
+  test("reassigning a child who already had a mere removes it from the old mere's enfants[]", () => {
+    localStorage.setItem('persons', JSON.stringify(makeBasicFamily())); // 4 has mere 3
+    const vm = getVm();
+
+    vm.nom = 'Nouvelle';
+    vm.prenom = 'Mere';
+    vm.sexe = 'F';
+    vm.enfants = [4];
+    vm.addPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].mere).toBe(5);
+    expect(persons[3].enfants).not.toContain(4);
+    expect(persons[2].enfants).toContain(4);
+  });
+
   test('a pending marriage pushes the bidirectional counterpart onto the spouse record', () => {
     localStorage.setItem('persons', JSON.stringify(makeBasicFamily()));
     const vm = getVm();

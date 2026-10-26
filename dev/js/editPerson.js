@@ -150,12 +150,17 @@ let formModele = new Vue({
             this.enfants.forEach(enfantId => {
                 if (personModif.enfants.indexOf(enfantId) === -1) {
                     var enfant = this.persons[enfantId];
-                    if(personModif.sexe === 'H'){
-                        enfant.pere = personModif.id;
+                    const champ = personModif.sexe === 'H' ? 'pere' : 'mere';
+                    // On retire l'enfant des enfants de son ancien parent (même rôle), s'il en avait un.
+                    const ancien = enfant[champ];
+                    if (ancien !== null && ancien !== undefined && ancien !== personModif.id
+                        && this.persons[ancien] && Array.isArray(this.persons[ancien].enfants)) {
+                        const i = this.persons[ancien].enfants.indexOf(enfantId);
+                        if (i !== -1) {
+                            this.persons[ancien].enfants.splice(i, 1);
+                        }
                     }
-                    else {
-                        enfant.mere = personModif.id;
-                    }
+                    enfant[champ] = personModif.id;
                     this.persons[enfantId] = enfant;
                 }
             });
