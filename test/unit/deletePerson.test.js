@@ -66,6 +66,42 @@ describe('deletePerson.js', () => {
     expect(persons[3].mariages).not.toContainEqual(expect.objectContaining({ maryId: 2 }));
   });
 
+  test("filters legacy string maryId entries out of the spouse's mariages[] (no phantom marriage)", () => {
+    const family = makeBasicFamily();
+    family[3].mariages = [{ maryId: '2', mariageDate: '1 juin 1975', divorceDate: null }];
+    const vm = getVm(family, 2);
+
+    vm.deleteYes();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[3].mariages).toEqual([]);
+  });
+
+  test('a marriage stored with a string maryId on the deleted side still cleans up the spouse', () => {
+    const family = makeBasicFamily();
+    family[2].mariages = [{ maryId: '3', mariageDate: '1 juin 1975', divorceDate: null }];
+    const vm = getVm(family, 2);
+
+    vm.deleteYes();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[3].mariages).toEqual([]);
+  });
+
+  test('deleting a person whose spouse is already a tombstone does not throw', () => {
+    const family = makeBasicFamily();
+    family[3] = { id: -1 }; // spouse of 2 already deleted, phantom marriage left on 2
+    family[4].mere = null;
+    const vm = getVm(family, 2);
+
+    expect(() => vm.deleteYes()).not.toThrow();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2]).toEqual({ id: -1 });
+    expect(persons[3]).toEqual({ id: -1 });
+    expect(persons[-1]).toBeUndefined();
+  });
+
   test('soft-deletes: persons[id] becomes exactly {id: -1}, array length and other indices stable', () => {
     const vm = getVm(makeBasicFamily(), 2);
 

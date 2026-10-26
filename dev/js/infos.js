@@ -52,7 +52,11 @@ let infosModele = new Vue({
                }
                if (personInfo.mariages.length > 0) {
                     personInfo.mariages.forEach(mariage => {
-                        var mary = this.persons[mariage.maryId];
+                        var mary = this.persons[Number(mariage.maryId)];
+                        // Mariage fantôme vers une personne supprimée (anciennes données) : on l'ignore.
+                        if (!mary || !mary.nom) {
+                            return;
+                        }
                         if(mariage.divorceDate !== null && mariage.divorceDate !== ""){
                             this.mariages.unshift("Divorcé(e) de " + mary.nom + " " + mary.prenom + " depuis le " + mariage.divorceDate);
                         }
@@ -77,34 +81,40 @@ let infosModele = new Vue({
        }
    },
    methods: {
-       findAncestors : function(person) {
+       // `chemin` contient les personnes de la branche en cours de parcours : garde-fou
+       // contre les cycles de parenté (données incohérentes), qui provoqueraient une récursion infinie.
+       findAncestors : function(person, chemin = new Set()) {
+            chemin.add(person.id);
             if(person.pere >= 0) {
                 var pere = this.persons[person.pere];
-                if(pere) {
+                if(pere && !chemin.has(pere.id)) {
                     this.ancetres.push({nom: pere.nom, prenom: pere.prenom, link: "/infos?id=" + pere.id});
-                    this.findAncestors(pere);
+                    this.findAncestors(pere, chemin);
                 }
             }
             if (person.mere >= 0) {
                 var mere = this.persons[person.mere];
-                if (mere) {
+                if (mere && !chemin.has(mere.id)) {
                     this.ancetres.push({nom: mere.nom, prenom: mere.prenom, link: "/infos?id=" + mere.id});
-                    this.findAncestors(mere);
+                    this.findAncestors(mere, chemin);
                 }
             }
+            chemin.delete(person.id);
        },
-       findDescendants : function(person) {
+       findDescendants : function(person, chemin = new Set()) {
+           chemin.add(person.id);
            if(person.enfants.length > 0) {
                person.enfants.forEach(enfantId => {
                    enfant = this.persons[enfantId];
-                   if(enfant) {
+                   if(enfant && !chemin.has(enfant.id)) {
                        this.descendants.push({nom: enfant.nom, prenom: enfant.prenom, link: "/infos?id=" + enfant.id});
                        if (enfant.enfants.length > 0 ) {
-                           this.findDescendants(enfant);
+                           this.findDescendants(enfant, chemin);
                        }
                    }
                })
            }
+           chemin.delete(person.id);
        }
    }
 });

@@ -65,6 +65,160 @@ describe('editPerson.js', () => {
     expect(persons[0].mere).toBe(3);
   });
 
+  test("adding a child who already had a pere removes it from the old pere's enfants[]", () => {
+    const vm = getVm(makeBasicFamily(), 0); // sexe: H, enfants: [2]; 4 has pere 2
+
+    vm.enfants = [2, 4];
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].pere).toBe(0);
+    expect(persons[0].enfants).toEqual([2, 4]);
+    expect(persons[2].enfants).not.toContain(4);
+    expect(persons[3].enfants).toContain(4);
+  });
+
+  test("adding a child who already had a mere removes it from the old mere's enfants[]", () => {
+    const vm = getVm(makeBasicFamily(), 1); // sexe: F, enfants: [2]; 4 has mere 3
+
+    vm.enfants = [2, 4];
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].mere).toBe(1);
+    expect(persons[3].enfants).not.toContain(4);
+    expect(persons[2].enfants).toContain(4);
+  });
+
+  test('changing the sexe of a parent migrates the kept children from pere to mere', () => {
+    const family = makeBasicFamily();
+    family[4].mere = null; // Luc has no mother, so Paul can become it
+    family[3].enfants = [];
+    const vm = getVm(family, 2); // sexe: H, enfants: [4]
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.editPerson();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(vm.done).toBe(true);
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].sexe).toBe('F');
+    expect(persons[2].enfants).toContain(4);
+    expect(persons[4].pere).toBe(null);
+    expect(persons[4].mere).toBe(2);
+    alertSpy.mockRestore();
+  });
+
+  test('changing the sexe is refused when a kept child already has a parent in the new role', () => {
+    const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4], and 4 already has mere: 3
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.nom = 'Renamed';
+    vm.editPerson();
+
+    expect(alertSpy).toHaveBeenCalled();
+    expect(vm.done).toBe(false);
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].sexe).toBe('H');
+    expect(persons[2].nom).toBe('Dupont');
+    expect(persons[4].pere).toBe(2);
+    expect(persons[4].mere).toBe(3);
+    alertSpy.mockRestore();
+  });
+
+  test('changing the sexe while removing every child clears the old role, not the other parent', () => {
+    const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4]
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.enfants = [];
+    vm.editPerson();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].sexe).toBe('F');
+    expect(persons[2].enfants).toEqual([]);
+    expect(persons[4].pere).toBe(null);
+    expect(persons[4].mere).toBe(3);
+    alertSpy.mockRestore();
+  });
+
+  test('changing the sexe of a childless person is allowed', () => {
+    const vm = getVm(makeBasicFamily(), 4); // sexe: H, enfants: []
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.sexe = 'F';
+    vm.editPerson();
+
+    expect(alertSpy).not.toHaveBeenCalled();
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].sexe).toBe('F');
+    alertSpy.mockRestore();
+  });
+
+  describe('parenthood cycles are refused', () => {
+    let alertSpy;
+    beforeEach(() => {
+      alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+    });
+    afterEach(() => {
+      alertSpy.mockRestore();
+    });
+
+    test('choosing oneself as pere is refused', () => {
+      const vm = getVm(makeBasicFamily(), 2);
+
+      vm.pere = 2;
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(vm.done).toBe(false);
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('choosing oneself as enfant is refused', () => {
+      const vm = getVm(makeBasicFamily(), 2);
+
+      vm.enfants = [4, 2];
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('choosing a descendant as pere is refused', () => {
+      const vm = getVm(makeBasicFamily(), 0); // 4 is a grandchild of 0
+
+      vm.pere = 4;
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('choosing an ancestor as enfant is refused', () => {
+      const vm = getVm(makeBasicFamily(), 4); // 0 is a grandparent of 4
+
+      vm.enfants = [0];
+      vm.editPerson();
+
+      expect(alertSpy).toHaveBeenCalled();
+      expect(JSON.parse(localStorage.getItem('persons'))).toEqual(makeBasicFamily());
+    });
+
+    test('a non-cyclic edit is still accepted', () => {
+      const vm = getVm(makeBasicFamily(), 3); // F, enfants: [4]
+
+      vm.enfants = [4, 0];
+      vm.editPerson();
+
+      expect(alertSpy).not.toHaveBeenCalled();
+      expect(vm.done).toBe(true);
+    });
+  });
+
   test('mutates the leaked global personModif (regression guard for the "personDel not set as global value" bug class)', () => {
     const vm = getVm(makeBasicFamily(), 2);
 
@@ -85,8 +239,20 @@ describe('editPerson.js', () => {
 
     vm.validMary();
 
-    expect(vm.mariages).toContainEqual({ maryId: '0', mariageDate: '5 mai 2005', divorceDate: '' });
+    expect(vm.mariages).toContainEqual({ maryId: 0, mariageDate: '5 mai 2005', divorceDate: '' });
     expect(vm.persons[0].mariages).toContainEqual({ maryId: 4, mariageDate: '5 mai 2005', divorceDate: '' });
+  });
+
+  test('validMary() + editPerson() persists maryId as a number on both sides', () => {
+    const vm = getVm(makeBasicFamily(), 4);
+    insertMaryInputs({ mary: '0', mariageDate: '5 mai 2005', divorceDate: '' });
+
+    vm.validMary();
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].mariages[0].maryId).toBe(0);
+    expect(persons[0].mariages[0].maryId).toBe(4);
   });
 
   test('validMary() alerts and does not push when mariageDate is missing', () => {

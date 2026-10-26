@@ -64,11 +64,13 @@ let formModele = new Vue({
         },
         validMary: function() {
             this.mariageNumber++;
-            var maryId = document.getElementById("mary").value;
+            var maryValue = document.getElementById("mary").value;
             var mariageDate = document.getElementById("mariageDate").value;
             var divorceDate = document.getElementById("divorceDate").value;
 
-            if (maryId && mariageDate) {
+            if (maryValue && mariageDate) {
+                // La valeur d'un <select> est une chaîne : on stocke l'id sous forme numérique.
+                var maryId = Number(maryValue);
                 this.addMariage = false;
                 this.mariages.push({
                     "maryId": maryId,
@@ -88,7 +90,58 @@ let formModele = new Vue({
         removeSelectChilds : function () {
             this.enfants = [];
         },
+        // Renvoie true si les parents/enfants sélectionnés créent un cycle de parenté :
+        // un parent qui serait aussi un descendant d'un des enfants choisis
+        // (ou un enfant qui serait un ancêtre d'un des parents choisis).
+        creeUnCycle: function (selfId, pere, mere, enfants) {
+            var parents = [pere, mere].filter(p => p !== null && p !== undefined);
+            if (selfId !== null && parents.indexOf(selfId) !== -1) {
+                return true;
+            }
+            // Parcours itératif des descendants des enfants sélectionnés, avec ensemble de visités.
+            var visites = new Set();
+            var aVisiter = (enfants || []).slice();
+            while (aVisiter.length > 0) {
+                var id = aVisiter.pop();
+                if (visites.has(id)) {
+                    continue;
+                }
+                visites.add(id);
+                if (id === selfId || parents.indexOf(id) !== -1) {
+                    return true;
+                }
+                var p = this.persons ? this.persons[id] : null;
+                if (p && Array.isArray(p.enfants)) {
+                    aVisiter.push(...p.enfants);
+                }
+            }
+            return false;
+        },
         editPerson: function () {
+            if (this.creeUnCycle(personModif.id, this.pere, this.mere, this.enfants)) {
+                alert("Impossible d'enregistrer : un individu ne peut pas être son propre parent, ni à la fois l'ancêtre et le descendant d'un autre. Vérifiez le père, la mère et les enfants sélectionnés.");
+                return;
+            }
+            // Le sexe détermine si la personne est le `pere` ou la `mere` de ses enfants.
+            // On calcule les deux rôles avant toute modification de personModif.sexe.
+            const ancienChamp = personModif.sexe === 'H' ? 'pere' : 'mere';
+            const nouveauChamp = (this.sexe ?? personModif.sexe) === 'H' ? 'pere' : 'mere';
+            // En cas de changement de sexe, un enfant conservé qui a déjà un autre parent
+            // dans le nouveau rôle aurait deux pères ou deux mères : on refuse.
+            if (ancienChamp !== nouveauChamp) {
+                const enfantEnConflit = this.enfants.find(enfantId => {
+                    if (personModif.enfants.indexOf(enfantId) === -1) {
+                        return false;
+                    }
+                    const autreParent = this.persons[enfantId][nouveauChamp];
+                    return Number.isInteger(autreParent) && autreParent >= 0 && autreParent !== personModif.id;
+                });
+                if (enfantEnConflit !== undefined) {
+                    const enfant = this.persons[enfantEnConflit];
+                    alert("Impossible de changer le sexe : " + enfant.prenom + " " + enfant.nom + " a déjà " + (nouveauChamp === 'pere' ? "un père" : "une mère") + " renseigné(e).");
+                    return;
+                }
+            }
             if (this.nom !== null && this.nom !== personModif.nom) {
                 personModif.nom = this.nom;
             }
@@ -136,12 +189,19 @@ let formModele = new Vue({
             personModif.enfants.forEach(enfantId => {
                 if (this.enfants.indexOf(enfantId) === -1) {
                     var enfant = this.persons[enfantId];
-                    if (personModif.sexe === 'H'){
-                        enfant.pere = null;
+                    // On efface l'ancien rôle, et seulement s'il désigne bien la personne modifiée.
+                    if (enfant[ancienChamp] === personModif.id) {
+                        enfant[ancienChamp] = null;
                     }
-                    else {
-                        enfant.mere = null;
+                    this.persons[enfantId] = enfant;
+                }
+                // Si le sexe a changé, l'enfant conservé passe de l'ancien rôle au nouveau.
+                else if (ancienChamp !== nouveauChamp) {
+                    var enfant = this.persons[enfantId];
+                    if (enfant[ancienChamp] === personModif.id) {
+                        enfant[ancienChamp] = null;
                     }
+                    enfant[nouveauChamp] = personModif.id;
                     this.persons[enfantId] = enfant;
                 }
             });
@@ -150,12 +210,17 @@ let formModele = new Vue({
             this.enfants.forEach(enfantId => {
                 if (personModif.enfants.indexOf(enfantId) === -1) {
                     var enfant = this.persons[enfantId];
-                    if(personModif.sexe === 'H'){
-                        enfant.pere = personModif.id;
+                    const champ = nouveauChamp;
+                    // On retire l'enfant des enfants de son ancien parent (même rôle), s'il en avait un.
+                    const ancien = enfant[champ];
+                    if (ancien !== null && ancien !== undefined && ancien !== personModif.id
+                        && this.persons[ancien] && Array.isArray(this.persons[ancien].enfants)) {
+                        const i = this.persons[ancien].enfants.indexOf(enfantId);
+                        if (i !== -1) {
+                            this.persons[ancien].enfants.splice(i, 1);
+                        }
                     }
-                    else {
-                        enfant.mere = personModif.id;
-                    }
+                    enfant[champ] = personModif.id;
                     this.persons[enfantId] = enfant;
                 }
             });

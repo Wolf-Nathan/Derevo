@@ -87,6 +87,62 @@ describe('byYear.js', () => {
     expect(vm.alivePersons.map((p) => p.nom)).toContain('BothKnown');
   });
 
+  // The real <input> yields a string: `year + 100` used to concatenate
+  // ("1950100") and turn comparisons lexicographic.
+  test('year given as a string (as typed in the input): death-only window still works', () => {
+    const vm = getVm(makeByYearFixture()); // DeathOnly: died 1980
+    vm.year = '1950';
+
+    vm.searchByYear();
+
+    expect(vm.alivePersons.map((p) => p.nom)).toContain('DeathOnly');
+  });
+
+  test('year given as a string: birth-only and both-dates branches still work', () => {
+    const vm = getVm(makeByYearFixture());
+    vm.year = '1975';
+
+    vm.searchByYear();
+
+    expect(vm.alivePersons.map((p) => p.nom)).toEqual(['BothKnown', 'BirthOnly', 'DeathOnly']);
+  });
+
+  test('year given as a string: out-of-range death-only person is excluded', () => {
+    const vm = getVm(makeByYearFixture()); // DeathOnly: died 1980
+    vm.year = '800';
+
+    vm.searchByYear();
+
+    expect(vm.alivePersons).toEqual([]);
+  });
+
+  test('a non-numeric year yields no results and does not throw', () => {
+    const vm = getVm(makeByYearFixture());
+    vm.year = 'abc';
+
+    expect(() => vm.searchByYear()).not.toThrow();
+    expect(vm.alivePersons).toEqual([]);
+  });
+
+  test('a deleted person (tombstone {id: -1}) is skipped without throwing', () => {
+    const family = makeByYearFixture();
+    family.push({ id: -1 });
+    family.splice(1, 0, { id: -1 });
+    const vm = getVm(family);
+    vm.year = 1975;
+
+    expect(() => vm.searchByYear()).not.toThrow();
+    expect(vm.alivePersons.map((p) => p.nom)).toEqual(['BothKnown', 'BirthOnly', 'DeathOnly']);
+  });
+
+  test('a person whose dates are undefined (missing keys) never matches and does not throw', () => {
+    const vm = getVm([{ id: 0, nom: 'Partial', prenom: 'P', sexe: 'H', pere: null, mere: null, enfants: [], mariages: [] }]);
+    vm.year = 1975;
+
+    expect(() => vm.searchByYear()).not.toThrow();
+    expect(vm.alivePersons).toEqual([]);
+  });
+
   test('a person with no dates at all never matches any search', () => {
     const vm = getVm(makeByYearFixture());
     vm.year = 1975;

@@ -1,6 +1,7 @@
 const { loadScript } = require('../helpers/loadScript');
 const { snapshotGlobals, cleanupNewGlobals } = require('../helpers/globalLeakGuard');
 const { makeDeepAncestorChain } = require('../fixtures/persons.deep');
+const { makeBasicFamily } = require('../fixtures/persons.basic');
 
 describe('infos.js', () => {
   let globalsBefore;
@@ -64,6 +65,34 @@ describe('infos.js', () => {
     const vm = getVm(makeDeepAncestorChain(5), 0); // youngest, enfants: []
 
     expect(vm.descendants).toEqual([]);
+  });
+
+  test('mounted() lists marriages stored with a legacy string maryId', () => {
+    const family = makeBasicFamily();
+    family[2].mariages = [{ maryId: '3', mariageDate: '1 juin 1975', divorceDate: null }];
+    const vm = getVm(family, 2);
+
+    expect(vm.mariages).toEqual(['Marié(e) avec Martin Claire depuis le 1 juin 1975']);
+  });
+
+  test('mounted() skips phantom marriages pointing to a deleted person', () => {
+    const family = makeBasicFamily();
+    family[3] = { id: -1 };
+    const vm = getVm(family, 2);
+
+    expect(vm.mariages).toEqual([]);
+    expect(vm.mariages.join(' ')).not.toContain('undefined');
+  });
+
+  test('cyclic parenthood data (A pere of B, B pere of A) does not recurse forever', () => {
+    const family = [
+      { id: 0, nom: 'Cycle', prenom: 'A', sexe: 'H', dateNaissance: null, dateMort: null, pere: 1, mere: null, enfants: [1], mariages: [] },
+      { id: 1, nom: 'Cycle', prenom: 'B', sexe: 'H', dateNaissance: null, dateMort: null, pere: 0, mere: null, enfants: [0], mariages: [] }
+    ];
+    const vm = getVm(family, 0);
+
+    expect(vm.ancetres.map((a) => a.prenom)).toEqual(['B']);
+    expect(vm.descendants.map((d) => d.prenom)).toEqual(['B']);
   });
 
   test('mounted() sets the leaked global personInfo', () => {
