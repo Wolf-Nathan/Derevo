@@ -66,6 +66,35 @@ Cette page permet de retrouver les individus étant nés une certaine année.
 
 Cette page est accessible depuis la page d'accueil en appuyant sur "Recherche par année".
 
+### Exporter / importer son arbre
+Les boutons "Exporter" et "Importer" se trouvent en haut à droite de la barre de navigation, sur toutes les pages.
+
+Les données de Derevo sont enregistrées uniquement dans votre navigateur (`localStorage`) : vider les données du site, changer de navigateur ou d'appareil fait perdre l'arbre. L'export permet d'en garder une sauvegarde et de le transférer ailleurs.
+
+- **Exporter** télécharge l'intégralité de l'arbre dans un fichier `derevo-arbre-AAAA-MM-JJ.json`.
+- **Importer** charge un fichier précédemment exporté. L'import **remplace** l'arbre actuel (une confirmation est demandée s'il contient déjà des individus), puis renvoie vers l'accueil. Un fichier invalide est refusé avec un message expliquant le problème, sans modifier vos données.
+
+Le fichier contient la liste des individus. L'`id` de chaque individu correspond à sa position dans la liste, et les liens (`pere`, `mere`, `enfants`, `maryId`) désignent ces `id` :
+
+```json
+[
+  {
+    "id": 0,
+    "nom": "Dupont",
+    "prenom": "Paul",
+    "sexe": "H",
+    "dateNaissance": "1 janvier 1950",
+    "dateMort": null,
+    "pere": null,
+    "mere": null,
+    "enfants": [2],
+    "mariages": [{ "maryId": 1, "mariageDate": "1 juin 1975", "divorceDate": null }]
+  }
+]
+```
+
+`sexe` vaut `H` ou `F`. Un individu supprimé est conservé sous la forme `{ "id": -1 }` afin de ne pas décaler les `id` suivants.
+
 ### A propos de l'équipe...
 http://localhost:8080/about
 
@@ -77,7 +106,7 @@ Cette page est accessible depuis n'importe quelle page depuis la barre de naviga
 
 Derevo dispose d'une suite de tests unitaires (Jest) couvrant la logique
 métier client-side : synchronisation bidirectionnelle des relations (ajout/édition/suppression d'un individu), parcours de l'arbre
-généalogique et recherche par année.
+généalogique, recherche par année et export/import de l'arbre au format JSON.
 
 Pour les lancer :
 
