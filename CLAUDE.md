@@ -95,14 +95,22 @@ instance in a matching script:
   patches both sides of any changed relationship.
 - `deletePerson.js`, `byYear.js`, `infos.js` — page-specific read/delete
   logic against the same `persons` array in `localStorage`.
-- `genereArbre.js` — renders the family tree for `/infos?id=`. It walks up
-  from the selected person to the eldest known ancestor (`creerArbreAsc`),
-  then recursively renders descendants and spouses (`creerArbreDesc`/
-  `creerMariage`) using a Vue render function (no templates) with custom
-  `Arbre`/`Personne` components.
+- `genereArbre.js` — renders the family tree for `/infos?id=` as a single
+  tree centered on the selected person: both paternal and maternal
+  ancestors above (`creerAncetres`, drawn as a descendant tree then flipped
+  with `scaleY(-1)` in `dev/css/style_arbre.css`), then the person's full
+  siblings beside them (`trouverFreresSoeurs`), and their spouses and
+  descendants below (`creerArbreDesc`/`creerMariage`). Uses a Vue render
+  function (no templates) with custom `Arbre`/`Personne` components.
 - `pagination.js` — jQuery-based table pagination/search, used on the home
   page's person list; operates purely on the rendered DOM (`table-id`), not
   on the underlying data.
+- `importExport.js` — included on **every** page (index + all views); mounts
+  its own Vue instance on the header `<nav id="navbar">` to export the
+  `persons` array as a downloaded JSON file and import one back (validated
+  against the data-model invariants, then replaces `localStorage` after a
+  `confirm()` and redirects to `/`). New pages must copy the header's
+  Exporter/Importer group (`.navbar-actions`) and include this script.
 - `vue.js` is the vendored Vue.js 2.6.11 library itself — do not edit it.
 
 ### Third-party dependencies
