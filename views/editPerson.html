@@ -101,7 +101,7 @@
                                 <div class="form-group">
                                     <label for="mary"> Sélectionner le mari/la femme de la personne</label>
                                     <select id="mary" v-model="mary" class="form-control" name="mary">
-                                    <option v-for="person in persons" v-if="person.nom" :value="person.id">
+                                    <option v-for="person in persons" v-if="person.nom && person.id !== id" :value="person.id">
                                         {{ person.nom }} {{ person.prenom }}
                                     </option>
                                 </select>
