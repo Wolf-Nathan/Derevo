@@ -304,20 +304,45 @@ describe('editPerson.js', () => {
     alertSpy.mockRestore();
   });
 
-  // Documents actual (broken) behavior rather than fixing it: editPerson()'s
-  // old-parent removal only guards with `!== null`, so a `pere === -1`
-  // (the sentinel used elsewhere for "no parent") reaches
-  // `this.persons[-1].enfants` and throws. In practice this looks
-  // unreachable via the real UI — addPerson.js/editPerson.js/deletePerson.js
-  // only ever write `null` for pere/mere, never `-1` (that sentinel is only
-  // ever used for `personDel`'s own tombstoned `id`) — but it's flagged
-  // here since other files (infos.js, genereArbre.js) do guard with `>= 0`,
-  // implying `-1` was expected to be a live possibility at some point.
-  test('editing a person whose old pere is -1 throws (sentinel-inconsistency edge case, not fixed here)', () => {
+  // `-1` is the "no parent" sentinel some files guard against with `>= 0`;
+  // editPerson() must treat it as "no old parent" instead of reading persons[-1].
+  test('editing a person whose old pere is -1 links the new pere without throwing', () => {
     const vm = getVm(makeSentinelFamily(), 1); // pere: -1, mere: -1
 
     vm.pere = 0;
+    vm.editPerson();
 
-    expect(() => vm.editPerson()).toThrow();
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[1].pere).toBe(0);
+    expect(persons[0].enfants).toContain(1);
+  });
+
+  test('editing a legacy record whose pere/mere are undefined does not throw', () => {
+    const family = makeBasicFamily();
+    delete family[0].pere;
+    delete family[0].mere;
+    const vm = getVm(family, 0); // le formulaire charge pere/mere = null
+
+    vm.nom = 'Renamed';
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[0].nom).toBe('Renamed');
+    expect(persons[0].pere).toBeNull();
+    expect(persons[0].mere).toBeNull();
+  });
+
+  test('choosing a deleted person (tombstone) as pere does not throw and leaves no dangling link', () => {
+    const family = makeBasicFamily();
+    family[0] = { id: -1 }; // 0 a été supprimé
+    family[2].pere = null;
+    const vm = getVm(family, 4);
+
+    vm.pere = 0;
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].pere).toBeNull();
+    expect(persons[2].enfants).not.toContain(4);
   });
 });
