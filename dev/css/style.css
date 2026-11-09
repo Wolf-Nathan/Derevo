@@ -41,6 +41,19 @@ body {
     cursor: pointer;
 }
 
+/* Boutons Exporter / Importer regroupés en haut à droite du header
+(hors du conteneur centré, pour que le logo reste au milieu). */
+.navbar-actions {
+    position: absolute;
+    top: 50%;
+    right: 2rem;
+    transform: translateY(-50%);
+    display: flex;
+    /* .navbar-nav (pour la couleur des liens) empile par défaut ses éléments en colonne. */
+    flex-direction: row;
+    gap: 2rem;
+}
+
 .navbar-brand {
     font-size: 45px;
     font-family: "Kamila Regular";

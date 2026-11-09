@@ -17,7 +17,7 @@
 </head>
 
 <body class="bg-primary">
-    <nav class="navbar navbar-dark">
+    <nav id="navbar" class="navbar navbar-dark">
         <div class="container justify-content-center">
             <div class="navbar-nav col-2">
                 <a class="nav-item nav-link active" href="/about">À propos</a>
@@ -30,6 +30,12 @@
             <div class="navbar-nav col-2">
                 <a class="nav-item nav-link" href="/add">Ajouter un individu</a>
             </div>
+        </div>
+
+        <div class="navbar-nav navbar-actions">
+            <a class="nav-item nav-link" href="#" v-on:click.prevent="exporter" title="Télécharger l'arbre au format JSON"><i class="fas fa-file-export"></i> Exporter</a>
+            <a class="nav-item nav-link" href="#" v-on:click.prevent="choisirFichier" title="Charger un arbre depuis un fichier JSON"><i class="fas fa-file-import"></i> Importer</a>
+            <input type="file" ref="fichier" accept=".json,application/json" class="d-none" v-on:change="lireFichier">
         </div>
     </nav>
 
@@ -129,6 +135,7 @@
     <script>
         AOS.init();
     </script>
+    <script src="/js/importExport.js"></script>
 </body>
 
 </html>
