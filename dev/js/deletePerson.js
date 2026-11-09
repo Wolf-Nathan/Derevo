@@ -39,13 +39,19 @@ let deleteModele = new Vue({
     },
     methods: {
         deleteYes: function () {
+            var position = null;
             if (this.personDel.pere !== null) {
-                var position = this.persons[this.personDel.pere].enfants.indexOf(this.id);
-                this.persons[this.personDel.pere].enfants.splice(position, 1);
+                position = this.persons[this.personDel.pere].enfants.indexOf(this.id);
+                // indexOf renvoie -1 si les données sont incohérentes : splice(-1, 1) supprimerait le dernier enfant.
+                if (position !== -1) {
+                    this.persons[this.personDel.pere].enfants.splice(position, 1);
+                }
             }
             if (this.personDel.mere !== null) {
-                var position = this.persons[this.personDel.mere].enfants.indexOf(this.id);
-                this.persons[this.personDel.mere].enfants.splice(position, 1);
+                position = this.persons[this.personDel.mere].enfants.indexOf(this.id);
+                if (position !== -1) {
+                    this.persons[this.personDel.mere].enfants.splice(position, 1);
+                }
             }
             this.personDel.enfants.forEach(enfantId => {
                 if(this.personDel.sexe === 'H'){

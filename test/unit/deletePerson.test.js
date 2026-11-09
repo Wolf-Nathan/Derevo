@@ -3,6 +3,16 @@ const { suppressNavigation } = require('../helpers/locationStub');
 const { snapshotGlobals, cleanupNewGlobals } = require('../helpers/globalLeakGuard');
 const { makeBasicFamily } = require('../fixtures/persons.basic');
 
+// Données incohérentes : 2 et 3 ont un autre enfant (5) mais ne listent pas 4,
+// alors que 4 pointe toujours vers eux.
+function makeInconsistentFamily() {
+  const family = makeBasicFamily();
+  family[2].enfants = [5];
+  family[3].enfants = [5];
+  family.push({ id: 5, nom: 'Dupont', prenom: 'Anne', sexe: 'F', dateNaissance: null, dateMort: null, pere: 2, mere: 3, enfants: [], mariages: [] });
+  return family;
+}
+
 describe('deletePerson.js', () => {
   let globalsBefore;
   let nav;
@@ -35,6 +45,16 @@ describe('deletePerson.js', () => {
     const persons = JSON.parse(localStorage.getItem('persons'));
     expect(persons[0].enfants).not.toContain(2);
     expect(persons[1].enfants).not.toContain(2);
+  });
+
+  test("does not remove another child when the parent's enfants[] is missing the deleted id", () => {
+    const vm = getVm(makeInconsistentFamily(), 4); // pere: 2, mere: 3, absent de leurs enfants
+
+    vm.deleteYes();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].enfants).toEqual([5]);
+    expect(persons[3].enfants).toEqual([5]);
   });
 
   test('orphans children by nulling pere when personDel.sexe is H', () => {
