@@ -95,6 +95,18 @@ let formModele = new Vue({
         removeSelectChilds : function () {
             this.enfants = [];
         },
+        // Renvoie la fiche de la personne d'id donné si elle existe et n'a pas été supprimée
+        // (une personne supprimée est remplacée par une tombe {id: -1}), sinon null.
+        personneVivante: function (id) {
+            if (!Number.isInteger(id) || id < 0) {
+                return null;
+            }
+            const personne = this.persons[id];
+            if (!personne || personne.id < 0 || !Array.isArray(personne.enfants)) {
+                return null;
+            }
+            return personne;
+        },
         // Renvoie true si les parents/enfants sélectionnés créent un cycle de parenté :
         // un parent qui serait aussi un descendant d'un des enfants choisis
         // (ou un enfant qui serait un ancêtre d'un des parents choisis).
@@ -165,29 +177,38 @@ let formModele = new Vue({
                 personModif.dateMort = this.dateMort.toLocaleDateString('fr', { day: 'numeric', month: 'long', year: 'numeric' })
             }
             if (this.pere !== personModif.pere) {
-                // On enlève la personne modifiée des enfants de l'ancien père renseigné, si il existe.
-                if (personModif.pere !== null) {
-                    position = this.persons[personModif.pere].enfants.indexOf(personModif.id);
+                // On enlève la personne modifiée des enfants de l'ancien père renseigné, s'il existe encore
+                // (il peut être null, undefined sur d'anciennes données, -1 ou supprimé).
+                const ancienPere = this.personneVivante(personModif.pere);
+                if (ancienPere) {
+                    position = ancienPere.enfants.indexOf(personModif.id);
                     // indexOf renvoie -1 si les données sont incohérentes : splice(-1, 1) supprimerait le dernier enfant.
                     if (position !== -1) {
-                        this.persons[personModif.pere].enfants.splice(position, 1);
+                        ancienPere.enfants.splice(position, 1);
                     }
                 }
-                // Puis on ajoute la personne modifée aux enfants du nouveau père renseigné.
-                this.persons[this.pere].enfants.push(personModif.id);
-                // Enfin on ajoute le père à la personne modifiée.
-                personModif.pere = this.pere;
+                // Puis on ajoute la personne modifiée aux enfants du nouveau père renseigné, s'il existe.
+                const nouveauPere = this.personneVivante(this.pere);
+                if (nouveauPere) {
+                    nouveauPere.enfants.push(personModif.id);
+                }
+                // Enfin on ajoute le père à la personne modifiée (null si aucun père valide).
+                personModif.pere = nouveauPere ? this.pere : null;
             }
             if (this.mere !== personModif.mere) {
                 // On applique le même traitement que pour le père
-                if (personModif.mere !== null) {
-                    position = this.persons[personModif.mere].enfants.indexOf(personModif.id);
+                const ancienneMere = this.personneVivante(personModif.mere);
+                if (ancienneMere) {
+                    position = ancienneMere.enfants.indexOf(personModif.id);
                     if (position !== -1) {
-                        this.persons[personModif.mere].enfants.splice(position, 1);
+                        ancienneMere.enfants.splice(position, 1);
                     }
                 }
-                this.persons[this.mere].enfants.push(personModif.id);
-                personModif.mere = this.mere;
+                const nouvelleMere = this.personneVivante(this.mere);
+                if (nouvelleMere) {
+                    nouvelleMere.enfants.push(personModif.id);
+                }
+                personModif.mere = nouvelleMere ? this.mere : null;
             }
 
             // On boucle sur tout les enfants du tableau de base de la personne modifiée,
