@@ -6,6 +6,7 @@ let yearFormModele = new Vue({
         persons: null,
         year: null,
         activeSearch : false,
+        yearError: null,
         alivePersons: []
     },
     mounted() {
@@ -20,14 +21,19 @@ let yearFormModele = new Vue({
     methods: {
         // On se base sur une espérance de vie de 100 ans si on ne connait qu'une seule des dates de naissance et de mort.
         searchByYear: function () {
-            this.activeSearch = true;
             this.alivePersons = [];
+            this.yearError = null;
             // L'année saisie peut être une chaîne : sans conversion, `year + 100` concatène.
             var year = parseInt(this.year, 10);
             if (Number.isNaN(year)) {
+                // Année vide ou invalide : on affiche un message plutôt qu'un faux « aucun résultat ».
+                this.activeSearch = false;
+                this.yearError = "Merci d'entrer une année valide.";
                 return;
             }
-            this.persons.forEach(person => {
+            this.activeSearch = true;
+            // Aucune donnée en localStorage : persons reste null, il n'y a simplement aucun résultat.
+            (this.persons || []).forEach(person => {
                 // On ignore les personnes supprimées (tombe {id: -1}, sans nom ni dates).
                 if (!person || person.id < 0 || !person.nom) {
                     return;
