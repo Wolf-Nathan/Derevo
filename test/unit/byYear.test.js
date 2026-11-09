@@ -124,6 +124,37 @@ describe('byYear.js', () => {
     expect(vm.alivePersons).toEqual([]);
   });
 
+  test('an empty or invalid year shows a validation message instead of "no results"', () => {
+    const vm = getVm(makeByYearFixture());
+    vm.year = '';
+
+    vm.searchByYear();
+
+    expect(vm.activeSearch).toBe(false);
+    expect(vm.yearError).toBeTruthy();
+  });
+
+  test('a valid search clears a previous validation message', () => {
+    const vm = getVm(makeByYearFixture());
+    vm.year = '';
+    vm.searchByYear();
+
+    vm.year = 1975;
+    vm.searchByYear();
+
+    expect(vm.yearError).toBeNull();
+    expect(vm.activeSearch).toBe(true);
+  });
+
+  test('searching with an empty localStorage (persons is null) does not throw', () => {
+    const vm = loadScript('byYear.js', { fixtureId: 'yearForm' });
+    vm.year = 1975;
+
+    expect(() => vm.searchByYear()).not.toThrow();
+    expect(vm.activeSearch).toBe(true);
+    expect(vm.alivePersons).toEqual([]);
+  });
+
   test('a deleted person (tombstone {id: -1}) is skipped without throwing', () => {
     const family = makeByYearFixture();
     family.push({ id: -1 });
