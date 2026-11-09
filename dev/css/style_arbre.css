@@ -124,3 +124,28 @@ right connector from last child*/
 .tree li a:hover~ul ul::before {
     border-color: #94a0b4;
 }
+
+/*Arbre commun : ancêtres (paternels et maternels) au-dessus de la personne, descendance en dessous*/
+
+.tree .arbre-commun {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tree .arbre-commun>ul {
+    margin: 0;
+    padding-left: 0;
+    padding-top: 0;
+}
+
+/*Les ancêtres sont dessinés comme un arbre descendant, puis retournés verticalement :
+les parents se retrouvent au-dessus de la personne, le père à gauche et la mère à droite.*/
+
+.tree .arbre-ancetres {
+    transform: scaleY(-1);
+}
+
+.tree .arbre-ancetres a {
+    transform: scaleY(-1);
+}

@@ -17,18 +17,36 @@ let arbre = new Vue({
                 }
             },
             methods: {
-                // `visites` : garde-fou contre les cycles de parenté (récursion infinie).
-                creerArbreAsc(idCurrent, createElement, visites = new Set()) {
-                    var currentP = this.findPersonne(idCurrent);
-                    visites.add(Number(currentP.id));
-                    // Attention : `null >= 0` vaut true en JS, d'où le test explicite sur un entier.
-                    var aPere = Number.isInteger(currentP.pere) && currentP.pere >= 0;
-                    var aMere = Number.isInteger(currentP.mere) && currentP.mere >= 0;
-                    var suivant = aPere ? currentP.pere : currentP.mere;
-                    if ((!aPere && !aMere) || visites.has(Number(suivant))) {
-                        return this.creerArbreDesc(idCurrent, createElement);
+                // Attention : `null >= 0` vaut true en JS, d'où le test explicite sur un entier.
+                estParentValide(parent) {
+                    return Number.isInteger(parent) && parent >= 0;
+                },
+                // Ancêtres de currentP, branches paternelle (à gauche) et maternelle (à droite) :
+                // ses parents, puis les parents de chacun, etc. Renvoie [] si aucun parent connu, sinon un <ul>.
+                // `chemin` : personnes de la branche en cours, garde-fou contre les cycles de parenté.
+                creerAncetres(currentP, createElement, chemin = new Set()) {
+                    var parents = [];
+                    chemin.add(Number(currentP.id));
+                    for (var idParent of [currentP.pere, currentP.mere]) {
+                        if (!this.estParentValide(idParent) || chemin.has(idParent)) {
+                            continue;
+                        }
+                        var parent = this.findPersonne(idParent);
+                        if (!parent) {
+                            continue;
+                        }
+                        parents.push(createElement("li", [
+                            createElement('Personne', {
+                                props: {
+                                    nom: parent.nom,
+                                    prenom: parent.prenom,
+                                    id_p: parent.id
+                                }
+                            })
+                        ].concat(this.creerAncetres(parent, createElement, chemin))));
                     }
-                    return this.creerArbreAsc(suivant, createElement, visites);
+                    chemin.delete(Number(currentP.id));
+                    return parents.length ? [createElement("ul", parents)] : [];
                 },
                 // `chemin` : personnes de la branche en cours, garde-fou contre les cycles de parenté.
                 creerArbreDesc(idCurrent, createElement, chemin = new Set()) {
@@ -93,7 +111,21 @@ let arbre = new Vue({
                 }
             },
             render: function(createElement) {
-                return createElement("ul", [this.creerArbreAsc(this.selected, createElement)]);
+                var selectedP = this.findPersonne(this.selected);
+                if (!selectedP) {
+                    return createElement("div");
+                }
+                // Un seul arbre centré sur la personne : ses ancêtres des deux côtés au-dessus
+                // (dessinés avec les mêmes règles CSS, puis retournés verticalement), sa descendance en dessous.
+                var parties = [];
+                var ancetres = this.creerAncetres(selectedP, createElement);
+                if (ancetres.length) {
+                    parties.push(createElement("ul", { class: "arbre-ancetres" }, [createElement("li", ancetres)]));
+                }
+                parties.push(createElement("ul", { class: "arbre-descendance" }, [
+                    this.creerArbreDesc(this.selected, createElement)
+                ]));
+                return createElement("div", { class: "arbre-commun" }, parties);
             }
 
         }
