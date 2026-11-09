@@ -81,6 +81,53 @@ describe('genereArbre.js', () => {
     expect(parents).toEqual(['Pere P', 'Mere M']);
   });
 
+  // Parents (0, 1) ; enfants communs 2, 3 (sélectionné), 4 ; demi-frère 5 (père seul) ; conjoint 6 de 3 ; enfant 7 de 3 ; enfant 8 de 2.
+  function makeSiblingsFamily() {
+    const p = (id, nom, sexe, pere, mere, enfants, mariages = []) =>
+      ({ id, nom, prenom: 'X', sexe, dateNaissance: null, dateMort: null, pere, mere, enfants, mariages });
+    return [
+      p(0, 'Pere', 'H', null, null, [2, 3, 4, 5]),
+      p(1, 'Mere', 'F', null, null, [2, 3, 4]),
+      p(2, 'Aine', 'H', 0, 1, [8]),
+      p(3, 'Moi', 'F', 0, 1, [7], [{ maryId: 6 }]),
+      p(4, 'Cadet', 'H', 0, 1, []),
+      p(5, 'DemiFrere', 'H', 0, null, []),
+      p(6, 'Conjoint', 'H', null, null, [7], [{ maryId: 3 }]),
+      p(7, 'MonEnfant', 'F', 6, 3, []),
+      p(8, 'Neveu', 'H', 2, null, [])
+    ];
+  }
+
+  test('siblings are shown next to the person, in birth order, under the parents', () => {
+    const wrapper = mountArbre(makeSiblingsFamily(), 3);
+
+    const fratrie = wrapper.findAll('.arbre-descendance > li > a:first-child').wrappers.map((a) => a.text());
+    expect(fratrie).toEqual(['Aine X', 'Moi X', 'Cadet X']);
+  });
+
+  test("siblings are shown alone: no nephews, while the person's spouse and children are shown", () => {
+    const wrapper = mountArbre(makeSiblingsFamily(), 3);
+
+    const names = noms(wrapper, '.arbre-descendance');
+    expect(names).toEqual(['Aine X', 'Moi X', 'Conjoint X', 'MonEnfant X', 'Cadet X']);
+    expect(names).not.toContain('Neveu X');
+  });
+
+  test('a half-sibling is not drawn as a child of both parents', () => {
+    const wrapper = mountArbre(makeSiblingsFamily(), 3);
+
+    expect(noms(wrapper, '.arbre-descendance')).not.toContain('DemiFrere X');
+  });
+
+  test("with a single known parent, all of that parent's children are siblings", () => {
+    const family = makeSiblingsFamily();
+    family[5].mere = null;
+    const wrapper = mountArbre(family, 5);
+
+    const fratrie = wrapper.findAll('.arbre-descendance > li > a:first-child').wrappers.map((a) => a.text());
+    expect(fratrie).toEqual(['Aine X', 'Moi X', 'Cadet X', 'DemiFrere X']);
+  });
+
   test('walks up the full ancestor chain', () => {
     const wrapper = mountArbre(makeDeepAncestorChain(5), 0); // 0 (youngest) .. 4 (eldest)
 
