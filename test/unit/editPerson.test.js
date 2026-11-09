@@ -255,6 +255,19 @@ describe('editPerson.js', () => {
     expect(persons[0].mariages[0].maryId).toBe(4);
   });
 
+  test('validMary() refuses a marriage of a person with themselves', () => {
+    const vm = getVm(makeBasicFamily(), 4);
+    insertMaryInputs({ mary: '4', mariageDate: '5 mai 2005', divorceDate: '' });
+    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
+
+    vm.validMary();
+
+    expect(alertSpy).toHaveBeenCalled();
+    expect(vm.mariages).toHaveLength(0);
+    expect(vm.persons[4].mariages).toHaveLength(0);
+    alertSpy.mockRestore();
+  });
+
   test('validMary() alerts and does not push when mariageDate is missing', () => {
     const vm = getVm(makeBasicFamily(), 4);
     insertMaryInputs({ mary: '0', mariageDate: '', divorceDate: '' });

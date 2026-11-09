@@ -71,6 +71,11 @@ let formModele = new Vue({
             if (maryValue && mariageDate) {
                 // La valeur d'un <select> est une chaîne : on stocke l'id sous forme numérique.
                 var maryId = Number(maryValue);
+                // Une personne ne peut pas se marier avec elle-même.
+                if (maryId === personModif.id) {
+                    alert("Une personne ne peut pas se marier avec elle-même !");
+                    return;
+                }
                 this.addMariage = false;
                 this.mariages.push({
                     "maryId": maryId,
