@@ -4,6 +4,16 @@ const { snapshotGlobals, cleanupNewGlobals } = require('../helpers/globalLeakGua
 const { makeBasicFamily } = require('../fixtures/persons.basic');
 const { makeSentinelFamily } = require('../fixtures/persons.sentinel');
 
+// Données incohérentes : 2 et 3 ont un autre enfant (5) mais ne listent pas 4,
+// alors que 4 pointe toujours vers eux.
+function makeInconsistentFamily() {
+  const family = makeBasicFamily();
+  family[2].enfants = [5];
+  family[3].enfants = [5];
+  family.push({ id: 5, nom: 'Dupont', prenom: 'Anne', sexe: 'F', dateNaissance: null, dateMort: null, pere: 2, mere: 3, enfants: [], mariages: [] });
+  return family;
+}
+
 describe('editPerson.js', () => {
   let globalsBefore;
 
@@ -43,6 +53,20 @@ describe('editPerson.js', () => {
     expect(persons[3].enfants).not.toContain(4);
     expect(persons[1].enfants).toContain(4);
     expect(persons[4].mere).toBe(1);
+  });
+
+  test("changing pere/mere does not remove another child when the old parent's enfants[] is missing the id", () => {
+    const vm = getVm(makeInconsistentFamily(), 4); // pere: 2, mere: 3, absent de leurs enfants
+
+    vm.pere = 0;
+    vm.mere = 1;
+    vm.editPerson();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2].enfants).toEqual([5]);
+    expect(persons[3].enfants).toEqual([5]);
+    expect(persons[0].enfants).toContain(4);
+    expect(persons[1].enfants).toContain(4);
   });
 
   test('a child removed from the new enfants set gets pere nulled on its own record (sexe H)', () => {

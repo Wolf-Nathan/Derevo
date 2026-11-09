@@ -147,6 +147,8 @@ let formModele = new Vue({
                     return;
                 }
             }
+
+            var position = null;
             if (this.nom !== null && this.nom !== personModif.nom) {
                 personModif.nom = this.nom;
             }
@@ -165,8 +167,11 @@ let formModele = new Vue({
             if (this.pere !== personModif.pere) {
                 // On enlève la personne modifiée des enfants de l'ancien père renseigné, si il existe.
                 if (personModif.pere !== null) {
-                    var position = this.persons[personModif.pere].enfants.indexOf(personModif.id);
-                    this.persons[personModif.pere].enfants.splice(position, 1);
+                    position = this.persons[personModif.pere].enfants.indexOf(personModif.id);
+                    // indexOf renvoie -1 si les données sont incohérentes : splice(-1, 1) supprimerait le dernier enfant.
+                    if (position !== -1) {
+                        this.persons[personModif.pere].enfants.splice(position, 1);
+                    }
                 }
                 // Puis on ajoute la personne modifée aux enfants du nouveau père renseigné.
                 this.persons[this.pere].enfants.push(personModif.id);
@@ -176,8 +181,10 @@ let formModele = new Vue({
             if (this.mere !== personModif.mere) {
                 // On applique le même traitement que pour le père
                 if (personModif.mere !== null) {
-                    var position = this.persons[personModif.mere].enfants.indexOf(personModif.id);
-                    this.persons[personModif.mere].enfants.splice(position, 1);
+                    position = this.persons[personModif.mere].enfants.indexOf(personModif.id);
+                    if (position !== -1) {
+                        this.persons[personModif.mere].enfants.splice(position, 1);
+                    }
                 }
                 this.persons[this.mere].enfants.push(personModif.id);
                 personModif.mere = this.mere;
