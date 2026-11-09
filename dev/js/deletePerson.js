@@ -53,12 +53,19 @@ let deleteModele = new Vue({
                     this.persons[this.personDel.mere].enfants.splice(position, 1);
                 }
             }
+            // Chez chaque enfant, on efface le champ (pere et/ou mere) qui désigne réellement la personne
+            // supprimée, sans se fier à son sexe : d'anciennes données peuvent avoir un rôle incohérent.
             this.personDel.enfants.forEach(enfantId => {
-                if(this.personDel.sexe === 'H'){
-                    this.persons[enfantId].pere = null;
+                const enfant = this.persons[enfantId];
+                // L'enfant peut avoir déjà été supprimé (tombe {id: -1}) : rien à nettoyer.
+                if (!enfant || enfant.id < 0) {
+                    return;
                 }
-                else {
-                    this.persons[enfantId].mere = null;
+                if (enfant.pere === this.id) {
+                    enfant.pere = null;
+                }
+                if (enfant.mere === this.id) {
+                    enfant.mere = null;
                 }
             });
 

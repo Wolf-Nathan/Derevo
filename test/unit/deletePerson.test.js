@@ -77,6 +77,32 @@ describe('deletePerson.js', () => {
     expect(persons[4].pere).toBe(2);
   });
 
+  test('nulls the field that actually points to the deleted person, whatever its sexe', () => {
+    const family = makeBasicFamily();
+    // Données incohérentes : 2 (H) est enregistré comme mère de 4, le vrai père est 0.
+    family[4].pere = 0;
+    family[4].mere = 2;
+    family[0].enfants.push(4);
+    const vm = getVm(family, 2);
+
+    vm.deleteYes();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4].mere).toBeNull();
+    expect(persons[4].pere).toBe(0);
+  });
+
+  test('skips children that were already deleted (tombstone)', () => {
+    const family = makeBasicFamily();
+    family[4] = { id: -1 };
+    const vm = getVm(family, 2);
+
+    expect(() => vm.deleteYes()).not.toThrow();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[4]).toEqual({ id: -1 });
+  });
+
   test("filters the deleted person out of every spouse's mariages[]", () => {
     const vm = getVm(makeBasicFamily(), 2); // married to 3
 
