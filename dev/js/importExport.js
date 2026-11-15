@@ -72,13 +72,19 @@ let importExportModele = new Vue({
             if (nbActuel > 0 && !confirm("L'import va remplacer votre arbre actuel (" + nbActuel + " personne(s)). Continuer ?")) {
                 return false;
             }
-            // Number() : tolère les anciens maryId stockés sous forme de chaîne.
             donnees.forEach(personne => {
-                if (Array.isArray(personne.mariages)) {
-                    personne.mariages.forEach(mariage => {
-                        mariage.maryId = Number(mariage.maryId);
-                    });
+                // Tombe {id: -1} : rien à normaliser.
+                if (personne.id === -1) {
+                    return;
                 }
+                personne.dateNaissance = this.normaliserDate(personne.dateNaissance);
+                personne.dateMort = this.normaliserDate(personne.dateMort);
+                personne.mariages.forEach(mariage => {
+                    // Number() : tolère les anciens maryId stockés sous forme de chaîne.
+                    mariage.maryId = Number(mariage.maryId);
+                    mariage.mariageDate = this.normaliserDate(mariage.mariageDate);
+                    mariage.divorceDate = this.normaliserDate(mariage.divorceDate);
+                });
             });
             localStorage.setItem('persons', JSON.stringify(donnees));
             // La page courante peut désigner une personne absente du nouvel arbre : retour à l'accueil.
@@ -93,6 +99,45 @@ let importExportModele = new Vue({
                 return 0;
             }
         },
+        // Même format que addPerson.js / editPerson.js : « 2 mars 1950 ».
+        formaterDate: function (date) {
+            return date.toLocaleDateString('fr', { day: 'numeric', month: 'long', year: 'numeric' });
+        },
+        // Ramène une date importée au format de l'application (« 2 mars 1950 », dont byYear.js lit le 3e mot).
+        // Renvoie null pour une date absente ou vide, et undefined si la valeur est inconvertible.
+        // Seuls les formats non ambigus sont convertis : ni nombres, ni « 03/02/1950 ».
+        normaliserDate: function (valeur) {
+            if (valeur === undefined || valeur === null || valeur === '') {
+                return null;
+            }
+            if (typeof valeur !== 'string') {
+                return undefined;
+            }
+            // Déjà au format de l'application : on n'y touche pas.
+            if (/^\d{1,2}(er)? \S+ \d{1,4}$/.test(valeur)) {
+                return valeur;
+            }
+            // Date ISO sans heure : on lit les composantes nous-mêmes, new Date("1950-03-02") est à minuit UTC
+            // et peut tomber la veille en heure locale.
+            const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(valeur);
+            if (iso) {
+                const annee = Number(iso[1]), mois = Number(iso[2]) - 1, jour = Number(iso[3]);
+                const date = new Date(2000, 0, 1);
+                // setFullYear : new Date(50, …) désignerait 1950.
+                date.setFullYear(annee, mois, jour);
+                // Rejette les dates impossibles (31 février), que Date reporterait sur le mois suivant.
+                if (date.getFullYear() !== annee || date.getMonth() !== mois || date.getDate() !== jour) {
+                    return undefined;
+                }
+                return this.formaterDate(date);
+            }
+            // Horodatage ISO (objet Date passé dans JSON.stringify) : jour en heure locale, comme l'application.
+            if (/^\d{4}-\d{2}-\d{2}T/.test(valeur)) {
+                const date = new Date(valeur);
+                return Number.isNaN(date.getTime()) ? undefined : this.formaterDate(date);
+            }
+            return undefined;
+        },
         // Vérifie les invariants du modèle de données (voir CLAUDE.md). Renvoie null si l'arbre est valide,
         // sinon un message d'erreur. La cohérence bidirectionnelle des relations n'est pas exigée :
         // d'anciens exports peuvent en contenir, et l'application les tolère.
@@ -100,7 +145,6 @@ let importExportModele = new Vue({
             if (!Array.isArray(donnees)) {
                 return "le fichier doit contenir une liste de personnes.";
             }
-            // La cible doit être une personne vivante : une tombe {id: -1} n'a ni enfants ni mariages.
             const estIndexValide = id => Number.isInteger(id) && id >= 0 && id < donnees.length
                 && Boolean(donnees[id]) && donnees[id].id === id;
             // Lien optionnel : absent, null ou -1 (ancienne valeur « aucun parent »), sinon un index existant.
@@ -124,6 +168,9 @@ let importExportModele = new Vue({
                 if (personne.sexe !== 'H' && personne.sexe !== 'F') {
                     return position + " : le sexe doit valoir 'H' ou 'F'.";
                 }
+                if (this.normaliserDate(personne.dateNaissance) === undefined || this.normaliserDate(personne.dateMort) === undefined) {
+                    return position + " : date de naissance ou de décès illisible (formats acceptés : « 2 mars 1950 » ou « 1950-03-02 »).";
+                }
                 if (!estLienValide(personne.pere) || !estLienValide(personne.mere)) {
                     return position + " : père ou mère inconnu.";
                 }
@@ -139,6 +186,12 @@ let importExportModele = new Vue({
                 );
                 if (!mariagesValides) {
                     return position + " : un mariage désigne une personne inconnue.";
+                }
+                const datesMariagesValides = personne.mariages.every(mariage =>
+                    this.normaliserDate(mariage.mariageDate) !== undefined && this.normaliserDate(mariage.divorceDate) !== undefined
+                );
+                if (!datesMariagesValides) {
+                    return position + " : un mariage a une date illisible (formats acceptés : « 2 mars 1950 » ou « 1950-03-02 »).";
                 }
             }
             return null;

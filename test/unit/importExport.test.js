@@ -134,11 +134,60 @@ describe('importExport.js', () => {
       ['a pere pointing at a tombstone', (f) => { f[0] = { id: -1 }; return f; }],
       ['a mere pointing at a tombstone', (f) => { f[1] = { id: -1 }; return f; }],
       ['an enfant pointing at a tombstone', (f) => { f[4] = { id: -1 }; f[3].enfants = []; return f; }],
-      ['a maryId pointing at a tombstone', (f) => { f[3] = { id: -1 }; f[4].mere = null; return f; }]
+      ['a maryId pointing at a tombstone', (f) => { f[3] = { id: -1 }; f[4].mere = null; return f; }],
+      // Dates inconvertibles : byYear.js fait .split(" ")[2] dessus.
+      ['a numeric dateNaissance', (f) => { f[0].dateNaissance = 1950; return f; }],
+      ['a slash-formatted dateMort', (f) => { f[0].dateMort = '03/02/1990'; return f; }],
+      ['an impossible ISO dateNaissance', (f) => { f[0].dateNaissance = '1950-02-31'; return f; }],
+      ['an unreadable mariageDate', (f) => { f[2].mariages[0].mariageDate = 'été 1975'; return f; }],
+      ['a divorceDate that is not a string', (f) => { f[2].mariages[0].divorceDate = { annee: 1980 }; return f; }]
     ])('rejects %s', (_label, alter) => {
       const vm = getVm();
 
       expect(vm.validerArbre(alter(makeBasicFamily()))).toEqual(expect.any(String));
+    });
+
+    test('accepts ISO dates and missing dates', () => {
+      const vm = getVm();
+      const family = makeBasicFamily();
+      family[0].dateNaissance = '1920-01-01';
+      family[0].dateMort = '1990-01-01T12:00:00.000Z';
+      delete family[1].dateNaissance;
+      family[2].mariages[0].divorceDate = '';
+
+      expect(vm.validerArbre(family)).toBeNull();
+    });
+  });
+
+  describe('normaliserDate()', () => {
+    test.each([
+      ['a missing date', undefined, null],
+      ['a null date', null, null],
+      ['an empty date', '', null],
+      ['a date already in the app format', '1 janvier 1950', '1 janvier 1950'],
+      ['a zero-padded datepicker date', '01 juin 1975', '01 juin 1975'],
+      ['an ISO date', '1950-03-02', '2 mars 1950'],
+      // Minuit UTC tomberait la veille à l'ouest de Greenwich : les composantes sont lues telles quelles.
+      ['an ISO date on the 1st of the month', '1950-03-01', '1 mars 1950'],
+      // Horodatage construit en heure locale : le test ne dépend pas du fuseau de la machine.
+      ['an ISO timestamp', new Date(1950, 2, 2).toISOString(), '2 mars 1950']
+    ])('converts %s', (_label, valeur, attendu) => {
+      const vm = getVm();
+
+      expect(vm.normaliserDate(valeur)).toBe(attendu);
+    });
+
+    test.each([
+      ['a number', 1950],
+      ['a slash-formatted date', '03/02/1950'],
+      ['an impossible date', '1950-02-31'],
+      ['an invalid timestamp', '1950-13-45Tnope'],
+      ['free text', 'vers 1950'],
+      ['an object', { annee: 1950 }]
+    ])('refuses %s', (_label, valeur) => {
+      const vm = getVm();
+
+      expect(vm.normaliserDate(valeur)).toBeUndefined();
     });
   });
 
@@ -202,6 +251,49 @@ describe('importExport.js', () => {
 
       expect(stored()[2].mariages[0].maryId).toBe(3);
       expect(stored()[3].mariages[0].maryId).toBe(2);
+    });
+
+    test('rewrites imported dates to the app format', () => {
+      const vm = getVm();
+      const family = makeBasicFamily();
+      family[0].dateNaissance = '1920-01-01';
+      // Horodatage construit en heure locale : le test ne dépend pas du fuseau de la machine.
+      family[0].dateMort = new Date(1990, 0, 1).toISOString();
+      delete family[1].dateMort;
+      family[2].mariages[0].mariageDate = '1975-06-01';
+      family[2].mariages[0].divorceDate = '';
+
+      expect(vm.importerTexte(JSON.stringify(family))).toBe(true);
+
+      expect(stored()[0].dateNaissance).toBe('1 janvier 1920');
+      expect(stored()[0].dateMort).toBe('1 janvier 1990');
+      expect(stored()[1].dateMort).toBeNull();
+      expect(stored()[2].mariages[0]).toEqual({ maryId: 3, mariageDate: '1 juin 1975', divorceDate: null });
+      // Les dates déjà au bon format ne bougent pas.
+      expect(stored()[4].dateNaissance).toBe('1 janvier 1978');
+    });
+
+    test('imports a tree containing a tombstone without touching it', () => {
+      const vm = getVm();
+      const family = makeBasicFamily();
+      family[4] = { id: -1 };
+      family[2].enfants = [];
+      family[3].enfants = [];
+
+      expect(vm.importerTexte(JSON.stringify(family))).toBe(true);
+
+      expect(stored()[4]).toEqual({ id: -1 });
+    });
+
+    test('unreadable date: alerts and leaves the stored tree untouched', () => {
+      const vm = getVm(makeBasicFamily());
+      const family = makeBasicFamily();
+      family[0].dateNaissance = 1920;
+
+      expect(vm.importerTexte(JSON.stringify(family))).toBe(false);
+
+      expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining('date'));
+      expect(stored()).toEqual(makeBasicFamily());
     });
   });
 
