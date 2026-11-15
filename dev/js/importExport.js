@@ -77,6 +77,9 @@ let importExportModele = new Vue({
                 if (personne.id === -1) {
                     return;
                 }
+                // « Aucun parent » s'écrit null : deletePerson.js et d'anciennes données connaissent aussi absent et -1.
+                personne.pere = Number.isInteger(personne.pere) && personne.pere >= 0 ? personne.pere : null;
+                personne.mere = Number.isInteger(personne.mere) && personne.mere >= 0 ? personne.mere : null;
                 personne.dateNaissance = this.normaliserDate(personne.dateNaissance);
                 personne.dateMort = this.normaliserDate(personne.dateMort);
                 personne.mariages.forEach(mariage => {

@@ -57,6 +57,35 @@ describe('deletePerson.js', () => {
     expect(persons[3].enfants).toEqual([5]);
   });
 
+  test.each([
+    ['-1 (legacy "no parent" value)', (p) => { p.pere = -1; p.mere = -1; }],
+    ['missing', (p) => { delete p.pere; delete p.mere; }]
+  ])('deletes a person whose pere and mere are %s', (_label, alter) => {
+    const family = makeBasicFamily();
+    alter(family[0]);
+    const vm = getVm(family, 0);
+
+    expect(() => vm.deleteYes()).not.toThrow();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[0]).toEqual({ id: -1 });
+    expect(persons[2].pere).toBeNull();
+    expect(persons[4].enfants).toEqual([]);
+  });
+
+  test('deletes a person whose pere is already a tombstone, and still cleans up the mere', () => {
+    const family = makeBasicFamily();
+    family[0] = { id: -1 };
+    const vm = getVm(family, 2); // pere: 0 (tombe), mere: 1
+
+    expect(() => vm.deleteYes()).not.toThrow();
+
+    const persons = JSON.parse(localStorage.getItem('persons'));
+    expect(persons[2]).toEqual({ id: -1 });
+    expect(persons[0]).toEqual({ id: -1 });
+    expect(persons[1].enfants).not.toContain(2);
+  });
+
   test('orphans children by nulling pere when personDel.sexe is H', () => {
     const vm = getVm(makeBasicFamily(), 2); // sexe: H, enfants: [4]
 

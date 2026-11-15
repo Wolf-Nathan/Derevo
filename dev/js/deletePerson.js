@@ -39,20 +39,18 @@ let deleteModele = new Vue({
     },
     methods: {
         deleteYes: function () {
-            var position = null;
-            if (this.personDel.pere !== null) {
-                position = this.persons[this.personDel.pere].enfants.indexOf(this.id);
+            [this.personDel.pere, this.personDel.mere].forEach(idParent => {
+                const parent = this.persons[idParent];
+                // Pas de parent (null, absent ou -1 sur d'anciennes données) ou parent déjà supprimé
+                if (!parent || !Array.isArray(parent.enfants)) {
+                    return;
+                }
+                const position = parent.enfants.indexOf(this.id);
                 // indexOf renvoie -1 si les données sont incohérentes : splice(-1, 1) supprimerait le dernier enfant.
                 if (position !== -1) {
-                    this.persons[this.personDel.pere].enfants.splice(position, 1);
+                    parent.enfants.splice(position, 1);
                 }
-            }
-            if (this.personDel.mere !== null) {
-                position = this.persons[this.personDel.mere].enfants.indexOf(this.id);
-                if (position !== -1) {
-                    this.persons[this.personDel.mere].enfants.splice(position, 1);
-                }
-            }
+            });
             // Chez chaque enfant, on efface le champ (pere et/ou mere) qui désigne réellement la personne
             // supprimée, sans se fier à son sexe : d'anciennes données peuvent avoir un rôle incohérent.
             this.personDel.enfants.forEach(enfantId => {
