@@ -71,13 +71,6 @@ function getPagination(table) {
 
 
 
-// SI SETTING
-$(function () {
-    // Just to append id number for each row  
-    default_index();
-
-});
-
 //ROWS SHOWING FUNCTION
 function showig_rows_count(maxRows, pageNum, totalRows) {
     //Default rows showing
@@ -85,18 +78,6 @@ function showig_rows_count(maxRows, pageNum, totalRows) {
     var start_index = ((maxRows * pageNum) - maxRows) + parseFloat(1);
     var string = 'Showing ' + start_index + ' to ' + end_index + ' of ' + totalRows + ' entries';
     $('.rows_count').html(string);
-}
-
-// CREATING INDEX
-function default_index() {
-    $('table tr:eq(0)').prepend('<th> # </th>')
-
-    var id = 0;
-
-    $('table tr:gt(0)').each(function () {
-        id++
-        $(this).prepend('<td>' + id + '</td>');
-    });
 }
 
 // All Table search script

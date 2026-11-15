@@ -27,7 +27,8 @@ rely on it actually validating anything.
 Unit tests cover the client-side business logic in `dev/js/*.js` — the
 bidirectional relationship-sync logic in `addPerson.js`/`editPerson.js`/
 `deletePerson.js`, the recursive tree-walking in `infos.js`/
-`genereArbre.js`, and the date-range filtering in `byYear.js`. `pagination.js`
+`genereArbre.js`, the date-range filtering in `byYear.js`, and the home
+list sorting in `listPersons.js`. `pagination.js`
 (pure jQuery DOM manipulation) and `server.js` (static file serving only)
 are intentionally not covered.
 
@@ -102,9 +103,18 @@ instance in a matching script:
   siblings beside them (`trouverFreresSoeurs`), and their spouses and
   descendants below (`creerArbreDesc`/`creerMariage`). Uses a Vue render
   function (no templates) with custom `Arbre`/`Personne` components.
+- `listPersons.js` — the home page's person list (`index.html`, mounted on
+  `#table-id`). The computed `personsAffichees` drops deleted persons and
+  applies the header-click sort (`trier`: ascending → descending → original
+  order, one column at a time, on `nom`/`prenom`/`dateNaissance`; French
+  date strings are compared through `cleDate`, undated persons always last).
+  It also renders the `#` rank column, and calls
+  `FilterkeyWord_all_table()` after mount and after each sort so
+  `pagination.js` re-applies its row hiding to the new row order.
 - `pagination.js` — jQuery-based table pagination/search, used on the home
-  page's person list; operates purely on the rendered DOM (`table-id`), not
-  on the underlying data.
+  page's person list; operates purely on the rendered DOM (`table-id`) by
+  row position, not on the underlying data — anything that re-orders or
+  re-renders the rows must re-trigger it.
 - `importExport.js` — included on **every** page (index + all views); mounts
   its own Vue instance on the header `<nav id="navbar">` to export the
   `persons` array as a downloaded JSON file and import one back (validated
