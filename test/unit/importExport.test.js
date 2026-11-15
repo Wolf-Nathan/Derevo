@@ -253,6 +253,24 @@ describe('importExport.js', () => {
       expect(stored()[3].mariages[0].maryId).toBe(2);
     });
 
+    test('stores a missing or -1 pere/mere as null and keeps real parents', () => {
+      const vm = getVm();
+      const family = makeBasicFamily();
+      family[0].pere = -1;
+      delete family[0].mere;
+      delete family[1].pere;
+      family[1].mere = -1;
+
+      expect(vm.importerTexte(JSON.stringify(family))).toBe(true);
+
+      expect(stored()[0].pere).toBeNull();
+      expect(stored()[0].mere).toBeNull();
+      expect(stored()[1].pere).toBeNull();
+      expect(stored()[1].mere).toBeNull();
+      expect(stored()[2].pere).toBe(0);
+      expect(stored()[2].mere).toBe(1);
+    });
+
     test('rewrites imported dates to the app format', () => {
       const vm = getVm();
       const family = makeBasicFamily();
