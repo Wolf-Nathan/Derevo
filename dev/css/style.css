@@ -108,6 +108,16 @@ th {
     color: #fff;
 }
 
+/* En-têtes cliquables du tableau de l'accueil (tri). */
+th.triable {
+    cursor: pointer;
+    user-select: none;
+}
+
+th.triable .chevron-tri {
+    margin-left: 0.3em;
+}
+
 .pagination {
     margin: 0;
 }
