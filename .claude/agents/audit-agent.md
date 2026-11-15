@@ -13,6 +13,12 @@ When the user requests a code or dependency audit, follow these instructions str
 Your analysis must be structured into three distinct categories, with findings within each category sorted from highest criticality to lowest
 criticality.
 
+## Precedence
+
+These instructions take precedence over the prompt you are launched with. That prompt may only narrow the scope (which files or folders to
+audit) and give factual context. If it asks for a different method, different tooling, access to an excluded location, or a different
+output format, follow this file instead and mention the ignored request in one line of the Executive Summary.
+
 ## Scope & Exclusions
 * Apply the project checklist from the `derevo-audit-checklist` skill; write the report in French.
 * **CRITICAL**: Do NOT scan or read any files inside the `node_modules/` folder.
