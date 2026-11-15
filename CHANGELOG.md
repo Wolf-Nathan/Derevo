@@ -2,15 +2,18 @@
 
 ## [2.0.0] - 2026-XX-XX
 
+## [1.2.0] - 2026-15-11
+
 ### Added
 - Add IA agents on project code (Copilot & Claude).
 - Unitary tests.
+- Import/export of tree.
 
 ### Fixed
 
 - Audit code with agents.
 
-## [1.0.2] - 2026-05-22
+## [1.1.0] - 2026-05-22
 
 - Fix wedding moving index when delete person
 
